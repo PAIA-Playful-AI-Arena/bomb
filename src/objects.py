@@ -1,45 +1,104 @@
-import abc
-
-from mlgame.view.view_model import Scene, create_rect_view_data
-
-# The Object Template
-class Template:
-    @abc.abstractmethod
-    def render (self, width: int, height: int, objects):
-        return
-
+import random
 
 # The Map Object
-class Map(Template):
-    def __init__ (self, mapWidth: int = 75, mapHeight: int = 50, tileSize: int = 5):
-        # Initialize the map.
+class Map:
+    # Each tile type and their corresponding image ID.
+    TILE_TYPES = {
+        "empty": None,
 
-        self.mapWidth = mapWidth
-        self.mapHeight = mapHeight
-        self.tileSize = tileSize
+        "ground_light": "ground_light",
+        "ground_dark": "ground_dark",
+        
+        "barrel": "barrel"
+    }
 
-        self.tiles = []
+    def __init__(self, width: int = 10, height: int = 5): # 15 x 10
+        self.width = width
+        self.height = height
 
-        for i in range(mapWidth * mapHeight):
-            self.tiles.append('empty')
+        self.tileSize = 0
 
-    # Render The Object
-    def render(self, width, height, objects):
-        i = 0
+        self.backgroundTiles = []
+        self.foregroundTiles = [] 
+        
+        for _ in range(width * height):
+            if random.randint(0, 2) > 0:
+                self.backgroundTiles.append('ground_dark')
+            else:
+                self.backgroundTiles.append('ground_light')
 
-        for x in range(self.mapWidth):
-            for y in range(self.mapHeight):
-                objects.append(create_rect_view_data(
-                    'tile',
+            self.foregroundTiles.append('empty')
 
-                    int(width / 2) + int((x - (self.mapWidth / 2)) * self.tileSize),
-                    int(height / 2) + int((y - (self.mapHeight / 2)) * self.tileSize),
+    # Calculate Tile Size
+    def calculateTileSize(self, width: int, height: int):
+        self.tileSize = 0
 
-                    self.tileSize,
-                    self.tileSize,
+        if width > height:
+            self.tileSize = width / (self.width + 1)
+        else:
+            self.tileSize = height / (self.height + 1)
 
-                    '#ffffff'
-                ))
+        if self.tileSize * self.width > width:
+            self.tileSize = width / (self.width + 1)
+        elif self.tileSize * self.height > height:
+            self.tileSize = height / (self.height + 1)
 
-                i += 1
+    # Set The Background Tile At The Specified Position
+    def setBackgroundTile(self, x: int, y: int, type: str):
+        self.backgroundTiles[x + (y * self.width)] = type
 
+    # Set The Foreground Tile At The Specified Position
+    def setForegroundTile(self, x: int, y: int, type: str):
+        self.foregroundTiles[x + (y * self.width)] = type
+
+    # Get The Background Tile At The Specified Position
+    def getBackgroundTile(self, x: int, y: int):
+        return self.backgroundTiles[x + (y * self.width)]
+
+    # Get The Foreground Tile At The Specified Position
+    def getForegroundTile(self, x: int, y: int):
+        return self.foregroundTiles[x + (y * self.width)]
+
+class Player:
+    def __init__(self, Map: Map, name: str):
+        self.name = name
+        self.score = 0
+
+        # The position of the player is "virtual", the "virtual" size of each tile is 64 x 64 pixels.
+        self.x = 32
+        self.y = 32
+        self.angle = 0
+
+        self.rotateDirection = 1
+
+        self.Map = Map
+
+    # Set The Position Of The Player
+    def setPosition (self, x: int, y: int):
+        self.x = x
+        self.y = y
+
+    # Move The Player
+    def move(self, x: int, y: int):
+        self.x += x
+        self.y += y
+
+        if self.x - (self.Map.tileSize / 3) < 0:
+            self.x = self.Map.tileSize / 3
+        elif self.x + (self.Map.tileSize / 3) > self.Map.width * 64:
+            self.x = (self.Map.width * 64) - (self.Map.tileSize / 3)
+
+        if self.y - (self.Map.tileSize / 16) < 0:
+            self.y = self.Map.tileSize / 16
+        elif self.y + (self.Map.tileSize / 1.75) > self.Map.height * 64:
+            self.y = (self.Map.height * 64) - (self.Map.tileSize / 1.75)
+
+        if x == 0 and y == 0:
+            self.angle = 0
+        else:
+            self.angle += self.rotateDirection
+
+            if self.angle > 0.5:
+                self.rotateDirection = -0.15
+            elif self.angle < -0.5:
+                self.rotateDirection = 0.15

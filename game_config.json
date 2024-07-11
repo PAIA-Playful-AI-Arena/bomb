@@ -4,8 +4,8 @@
   "url": "https://github.com/PAIA-Playful-AI-Arena/bomb",
   "description": "",
   "logo": [
-    "./asset/logo.png",
-    "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/main/asset/logo.png"
+    "./asset/icon.png",
+    "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/main/asset/icon.png"
   ],
   "user_num": {
     "min": 1,

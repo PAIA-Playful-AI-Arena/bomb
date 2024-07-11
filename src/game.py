@@ -1,9 +1,11 @@
+from os import path
 import pygame
 
-from mlgame.game.paia_game import GameStatus, GameResultState, PaiaGame
+from mlgame.game.paia_game import GameStatus, PaiaGame
 from mlgame.view.decorator import check_game_progress, check_game_result
-from mlgame.view.view_model import Scene
+from mlgame.view.view_model import Scene, create_asset_init_data
 
+from .render import render
 from .objects import *
 
 from .env import *
@@ -11,10 +13,11 @@ from .env import *
 # The Game Itself
 class Bomb(PaiaGame):
     # Initialize The Game
-    def __init__(self, width:int = 750, height:int = 500, players: int = 1, *args, **kwargs):
+    def __init__(self, width: int = 750, height: int = 500, players: int = 1, *args, **kwargs): # 750 x 500
         super().__init__(user_num=players)
 
         self.frame_count = 0
+
         self.width = width
         self.height = height
 
@@ -22,21 +25,34 @@ class Bomb(PaiaGame):
 
         self.Map = Map()
 
+        self.Map.calculateTileSize(width, height)
+
+        self.Map.setForegroundTile(2, 2, 'barrel')
+
+
         # Initialize players data.
 
-        self.players_data = {}
+        self.players = {}
 
         for i in range(players):
-            self.players_data[str(i + 1) + 'P'] = { "score": 0, "x": 0, "y": 0 }
+            id = str(i + 1) + 'P'
 
-        self.scene = Scene(width, height, '#000000')
+            self.players[id] = Player(self.Map, id)
+
+        self.scene = Scene(width, height, '#211711') 
 
     # Get Scene Init Data
     def get_scene_init_data(self):
         scene_init_data = {
             "scene": self.scene.__dict__,
             "assets": [
-                # create_asset_init_data("brick", 25, 10, BRICK_PATH, BRICK_URL),
+                create_asset_init_data('ground_light', 64, 64, IMAGE_GROUND_LIGHT_PATH, IMAGE_GROUND_LIGHT_URL),
+                create_asset_init_data('ground_dark', 64, 64, IMAGE_GROUND_DARK_PATH, IMAGE_GROUND_DARK_URL),
+
+                create_asset_init_data('barrel', 64, 64, IMAGE_BARREL_PATH, IMAGE_BARREL_URL),
+
+                create_asset_init_data('player', 64, 64, IMAGE_PLAYER_PATH, IMAGE_PLAYER_URL),
+                create_asset_init_data('bomb', 64, 64, IMAGE_PLAYER_PATH, IMAGE_BOMB_URL),
             ],
             "background": [
                 # create_image_view_data("bg", 0, 0, 1000, 500),
@@ -46,11 +62,31 @@ class Bomb(PaiaGame):
         return scene_init_data
 
     # Update The Game
-    def update(self, commands):
+    def update(self, players):
+        self.frame_count += 1
+
         # update game by these commands
-        #ai_1p_cmd = commands[self.ai_clients()[0]["name"]z]
+        #ai_1p_cmd = commands[self.ai_clients()[0]["name"]]
         #command = (PlatformAction(ai_1p_cmd)
         #           if ai_1p_cmd in PlatformAction.__members__ else PlatformAction.NONE)
+
+        for id, commands in players.items():
+            if (commands != None):
+                x = 0
+                y = 0
+
+                if 'move_left' in commands:
+                    x = -5
+                elif 'move_right' in commands:
+                    x = 5
+    
+                if 'move_up' in commands:
+                    y = -5
+                elif 'move_down' in commands:
+                    y = 5
+
+
+                self.players[id].move(x, y)
 
         if not self.is_running:
             return "RESET"
@@ -59,24 +95,17 @@ class Bomb(PaiaGame):
     def get_data_from_game_to_player(self):
         to_players_data = {}
 
-        #data_to_1p = {
-        #    "frame": self.frame_count,
-        #    "status": self.get_game_status()
-        #}
-
         for ai_client in self.ai_clients():
-            player_data = self.players_data[ai_client["name"]]
-
-            print(player_data)
+            player = self.players[ai_client["name"]]
 
             to_players_data[ai_client["name"]] = {
-                "status": None,
+                "status": GameStatus.GAME_ALIVE,
                 "frame": self.frame_count,
 
-                "score": player_data["score"],
+                "score": player.score,
 
-                "x": player_data["x"],
-                "y": player_data["y"]
+                "x": player.x,
+                "y": player.y
             }
 
         return to_players_data
@@ -99,9 +128,10 @@ class Bomb(PaiaGame):
 
     @check_game_progress
     def get_scene_progress_data(self) -> dict:
-        object_list = []
+        players = []
 
-        self.Map.render(self.width, self.height, object_list)
+        for _, player in self.players.items():
+            players.append(player)
 
         return {
             "frame": self.frame_count,
@@ -109,7 +139,7 @@ class Bomb(PaiaGame):
             "background": [],
             "foreground": [],
 
-            "object_list": object_list,
+            "object_list": render(self.width, self.height, self.Map, players),
             "toggle_with_bias": [],
             "toggle": [],
 
@@ -138,6 +168,7 @@ class Bomb(PaiaGame):
 
     def get_keyboard_command(self):
         cmd_1p = "NONE"
+
         key_pressed_list = pygame.key.get_pressed()
         if key_pressed_list[pygame.K_a]:
             cmd_1p = "SERVE_TO_LEFT"
@@ -151,7 +182,7 @@ class Bomb(PaiaGame):
             cmd_1p = "NONE"
 
         ai_1p = self.ai_clients()[0]["name"]
-
+        
         return {ai_1p: cmd_1p}
 
     @staticmethod
