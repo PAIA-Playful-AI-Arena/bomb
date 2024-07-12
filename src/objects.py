@@ -69,7 +69,7 @@ class Player:
         self.y = 32
         self.angle = 0
 
-        self.rotateDirection = 1
+        self.rotateDirection = -1
 
         self.Map = Map
 
@@ -88,10 +88,10 @@ class Player:
         elif self.x + (self.Map.tileSize / 3) > self.Map.width * 64:
             self.x = (self.Map.width * 64) - (self.Map.tileSize / 3)
 
-        if self.y - (self.Map.tileSize / 16) < 0:
-            self.y = self.Map.tileSize / 16
-        elif self.y + (self.Map.tileSize / 1.75) > self.Map.height * 64:
-            self.y = (self.Map.height * 64) - (self.Map.tileSize / 1.75)
+        if self.y - (self.Map.tileSize / 2) < 0:
+            self.y = self.Map.tileSize / 2
+        elif self.y + (self.Map.tileSize / 2) > self.Map.height * 64:
+            self.y = (self.Map.height * 64) - (self.Map.tileSize / 2)
 
         if x == 0 and y == 0:
             self.angle = 0

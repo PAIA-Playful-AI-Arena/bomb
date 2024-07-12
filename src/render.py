@@ -43,11 +43,17 @@ def render(width: int, height: int, Map: Map, players: MutableSequence[Player]):
     font.set_bold(True)
 
     for player in players:
+        renderX = mapRenderX + (((Map.tileSize / 64) * player.x) - (playerSize / 2))
+        renderY = mapRenderY + (((Map.tileSize / 64) * player.y) - (playerSize / 2))
+
+        if player.angle != 0:
+            renderY -= playerSize / 8
+
         objects.append(create_image_view_data(
             'player',
 
-            mapRenderX + (((Map.tileSize / 64) * player.x) - (playerSize / 2)),
-            mapRenderY + (((Map.tileSize / 64) * player.y) - (playerSize / 2)),
+            renderX,
+            renderY,
 
             playerSize,
             playerSize,
