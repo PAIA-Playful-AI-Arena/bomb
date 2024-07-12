@@ -29,6 +29,10 @@ class Bomb(PaiaGame):
         self.Map.calculate_tile_size(width, height)
 
         self.Map.set_foreground_tile(2, 2, 'barrel')
+        self.Map.set_foreground_tile(3, 2, 'barrel')
+        self.Map.set_foreground_tile(4, 2, 'barrel')
+        self.Map.set_foreground_tile(5, 2, 'barrel')
+        self.Map.set_foreground_tile(6, 2, 'barrel')
 
 
         # Initialize players data.
@@ -71,6 +75,11 @@ class Bomb(PaiaGame):
         #command = (PlatformAction(ai_1p_cmd)
         #           if ai_1p_cmd in PlatformAction.__members__ else PlatformAction.NONE)
 
+        explodedBombs = self.Bombs.update()
+
+        for explodedBomb in explodedBombs:
+            self.players[explodedBomb["owner"]].bombs += 1
+
         for id, commands in players.items():
             if (commands != None):
                 self.players[id].update()
@@ -88,8 +97,7 @@ class Bomb(PaiaGame):
                 elif 'move_down' in commands:
                     y = 5 
 
-                if x != 0 or y != 0:
-                    self.players[id].move(x, y)
+                self.players[id].move(x, y)
 
                 if 'place_bomb' in commands:
                     self.players[id].place_bomb()

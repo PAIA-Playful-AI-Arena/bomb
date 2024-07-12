@@ -1,7 +1,8 @@
 from collections.abc import MutableSequence
 import pygame
+import math
 
-from mlgame.view.view_model import create_text_view_data, create_image_view_data
+from mlgame.view.view_model import create_polygon_view_data, create_text_view_data, create_image_view_data
 
 from .objects import *
 
@@ -39,15 +40,35 @@ def render(width: int, height: int, Map: Map, Bombs: Bombs, players: MutableSequ
     bombSize = Map.tileSize * 0.75
 
     for bomb in Bombs.bombs:
+        centerX = mapRenderX + ((Map.tileSize / 64) * bomb["x"])
+        centerY = mapRenderY + ((Map.tileSize / 64) * bomb["y"])
+
         objects.append(create_image_view_data(
             "bomb",
 
-            mapRenderX + (((Map.tileSize / 64) * bomb["x"]) - (bombSize / 2)),
-            mapRenderY + (((Map.tileSize / 64) * bomb["y"]) - (bombSize / 2)),
+            centerX - (bombSize / 2),
+            centerY - (bombSize / 2),
 
             bombSize,
             bombSize
         ))
+
+        points = [[centerX, centerY + (Map.tileSize * 0.1)]]
+
+        for i in range(int((360 / 150) * (150 - bomb["countdown"]))):
+            points.append([
+                (centerX + (Map.tileSize * 0.02)) + ((Map.tileSize * 0.15) * math.cos(math.radians(i - 90))),
+                (centerY + (Map.tileSize * 0.1)) + ((Map.tileSize * 0.15) * math.sin(math.radians(i - 90)))
+            ])
+
+        if (len(points) >= 3):
+            objects.append(create_polygon_view_data(
+                "bomb_countdown",
+
+                points,
+
+                '#b00e0e'
+            ))
 
     # Render Players 
 

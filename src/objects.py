@@ -12,7 +12,7 @@ class Map:
         "barrel": "barrel"
     }
 
-    def __init__(self, width: int = 15, height: int = 10): # 15 x 10
+    def __init__(self, width: int = 10, height: int = 5): # 15 x 10
         self.width = width
         self.height = height
 
@@ -86,11 +86,13 @@ class Bombs:
     def update(self):
         explodedBombs = []
 
-        for bomb in self.bombs:
+        for index, bomb in enumerate(self.bombs):
             bomb["countdown"] -= 1
 
             if bomb["countdown"] < 0:
                 explodedBombs.append({ "owner": bomb["owner"], "x": bomb["x"], "y": bomb["y"] })
+
+                self.bombs.pop(index)
 
         return explodedBombs
 
@@ -138,6 +140,18 @@ class Player:
 
     # Move The Player
     def move(self, x: int, y: int):
+        if x == 0 and y == 0:
+            self.angle = 0
+
+            return
+        else:
+            self.angle += self.rotateDirection
+
+            if self.angle > 0.5:
+                self.rotateDirection = -0.15
+            elif self.angle < -0.5:
+                self.rotateDirection = 0.1
+
         # Check map forground tiles collision
 
         self.x += x 
@@ -178,17 +192,7 @@ class Player:
         if self.y - (64 / 2) < 0:
             self.y = 64 / 2
         elif self.y + (64 / 2) > self.Map.height * 64:
-            self.y = (self.Map.height * 64) - (64 / 2) 
-
-        if x == 0 and y == 0:
-            self.angle = 0
-        else:
-            self.angle += self.rotateDirection
-
-            if self.angle > 0.5:
-                self.rotateDirection = -0.15
-            elif self.angle < -0.5:
-                self.rotateDirection = 0.1
+            self.y = (self.Map.height * 64) - (64 / 2)  
 
     # Place A Bomb
     def place_bomb(self):
