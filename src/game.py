@@ -24,10 +24,11 @@ class Bomb(PaiaGame):
         # Initialize game objects.
 
         self.Map = Map()
+        self.Bombs = Bombs()
 
-        self.Map.calculateTileSize(width, height)
+        self.Map.calculate_tile_size(width, height)
 
-        self.Map.setForegroundTile(2, 2, 'barrel')
+        self.Map.set_foreground_tile(2, 2, 'barrel')
 
 
         # Initialize players data.
@@ -37,7 +38,7 @@ class Bomb(PaiaGame):
         for i in range(players):
             id = str(i + 1) + 'P'
 
-            self.players[id] = Player(self.Map, id)
+            self.players[id] = Player(self.Map, self.Bombs, id)
 
         self.scene = Scene(width, height, '#211711') 
 
@@ -52,7 +53,7 @@ class Bomb(PaiaGame):
                 create_asset_init_data('barrel', 64, 64, IMAGE_BARREL_PATH, IMAGE_BARREL_URL),
 
                 create_asset_init_data('player', 64, 64, IMAGE_PLAYER_PATH, IMAGE_PLAYER_URL),
-                create_asset_init_data('bomb', 64, 64, IMAGE_PLAYER_PATH, IMAGE_BOMB_URL),
+                create_asset_init_data('bomb', 64, 64, IMAGE_BOMB_PATH, IMAGE_BOMB_URL),
             ],
             "background": [
                 # create_image_view_data("bg", 0, 0, 1000, 500),
@@ -72,6 +73,8 @@ class Bomb(PaiaGame):
 
         for id, commands in players.items():
             if (commands != None):
+                self.players[id].update()
+
                 x = 0
                 y = 0
 
@@ -83,10 +86,13 @@ class Bomb(PaiaGame):
                 if 'move_up' in commands:
                     y = -5
                 elif 'move_down' in commands:
-                    y = 5
+                    y = 5 
 
+                if x != 0 or y != 0:
+                    self.players[id].move(x, y)
 
-                self.players[id].move(x, y)
+                if 'place_bomb' in commands:
+                    self.players[id].place_bomb()
 
         if not self.is_running:
             return "RESET"
@@ -139,7 +145,7 @@ class Bomb(PaiaGame):
             "background": [],
             "foreground": [],
 
-            "object_list": render(self.width, self.height, self.Map, players),
+            "object_list": render(self.width, self.height, self.Map, self.Bombs, players),
             "toggle_with_bias": [],
             "toggle": [],
 
