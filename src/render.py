@@ -15,7 +15,7 @@ def render(width: int, height: int, Map: Map, players: MutableSequence[Player]):
     renderY = round((height / 2) - ((Map.height / 2) * Map.tileSize), 0)
 
     for y in range(Map.height):
-        renderX = (width / 2) - ((Map.width / 2) * Map.tileSize) 
+        renderX = round(width / 2) - ((Map.width / 2) * Map.tileSize)
 
         for x in range(Map.width):
             backgroundTile = Map.TILE_TYPES[Map.getBackgroundTile(x, y)]
@@ -27,13 +27,11 @@ def render(width: int, height: int, Map: Map, players: MutableSequence[Player]):
             if (foregroundTile != None):
                 objects.append(create_image_view_data(foregroundTile, renderX, renderY, Map.tileSize, Map.tileSize))
 
-            renderX += round(Map.tileSize, 0) 
+            renderX += round(Map.tileSize, 0)
 
         renderY += round(Map.tileSize, 0)
 
     # Render Players
-
-    playerSize = Map.tileSize * 0.9
 
     mapRenderX = round((width / 2) - ((Map.width / 2) * Map.tileSize), 0)
     mapRenderY = round((height / 2) - ((Map.height / 2) * Map.tileSize), 0)
@@ -43,11 +41,11 @@ def render(width: int, height: int, Map: Map, players: MutableSequence[Player]):
     font.set_bold(True)
 
     for player in players:
-        renderX = mapRenderX + (((Map.tileSize / 64) * player.x) - (playerSize / 2))
-        renderY = mapRenderY + (((Map.tileSize / 64) * player.y) - (playerSize / 2))
+        renderX = mapRenderX + (((Map.tileSize / 64) * player.x) - (player.playerSize / 2))
+        renderY = mapRenderY + (((Map.tileSize / 64) * player.y) - (player.playerSize / 2))
 
         if player.angle != 0:
-            renderY -= playerSize / 8
+            renderY -= player.playerSize / 8
 
         objects.append(create_image_view_data(
             'player',
@@ -55,8 +53,8 @@ def render(width: int, height: int, Map: Map, players: MutableSequence[Player]):
             renderX,
             renderY,
 
-            playerSize,
-            playerSize,
+            player.playerSize,
+            player.playerSize,
 
             player.angle
         ))
@@ -67,7 +65,7 @@ def render(width: int, height: int, Map: Map, players: MutableSequence[Player]):
             player.name,
 
             int(mapRenderX + (((Map.tileSize / 64) * player.x) - (size[0] / 2))),
-            int(mapRenderY + (((Map.tileSize / 64) * player.y) - (playerSize * 0.9))),
+            int(mapRenderY + (((Map.tileSize / 64) * player.y) - (player.playerSize * 0.9))),
 
             '#19d44b',
 
