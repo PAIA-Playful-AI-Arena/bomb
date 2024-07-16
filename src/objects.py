@@ -1,4 +1,7 @@
 import random
+import math
+
+from .env import *
 
 # The Map Object
 class Map:
@@ -9,7 +12,8 @@ class Map:
         "ground_light": "ground_light",
         "ground_dark": "ground_dark",
         
-        "barrel": "barrel"
+        "barrel": "barrel",
+        "rock": "rock"
     }
 
     def __init__(self, width: int = 10, height: int = 5): # 15 x 10
@@ -31,17 +35,45 @@ class Map:
 
     # Calculate Tile Size
     def calculate_tile_size(self, width: int, height: int):
-        self.tileSize = 0
+        self.tile_size = 0
 
         if width > height:
-            self.tileSize = width / (self.width + 1)
+            self.tile_size = width / (self.width + 1)
         else:
-            self.tileSize = height / (self.height + 1)
+            self.tile_size = height / (self.height + 1)
 
-        if self.tileSize * self.width > width:
-            self.tileSize = width / (self.width + 1)
-        elif self.tileSize * self.height > height:
-            self.tileSize = height / (self.height + 1)
+        if self.tile_size * self.width > width:
+            self.tile_size = width / (self.width + 1)
+        elif self.tile_size * self.height > height:
+            self.tile_size = height / (self.height + 1)
+
+    # Set The Size Of The Map
+    def set_size(self, width: int, height: int):
+        background_tiles = []
+        foreground_tiles = []
+        
+        i = 0
+ 
+        for y in range(height):
+            for x in range(width):
+                if (y >= self.height or x >= self.width):
+                    if random.randint(0, 2) > 0:
+                        background_tiles.append('ground_dark')
+                    else:
+                        background_tiles.append('ground_light')
+
+                    foreground_tiles.append('empty')
+                else:
+                    background_tiles.append(self.get_background_tile(x, y))
+                    foreground_tiles.append(self.get_foreground_tile(x, y))
+
+                i += 1
+
+        self.width = width
+        self.height = height
+
+        self.background_tiles = background_tiles
+        self.foreground_tiles = foreground_tiles
 
     # Set The Background Tile At The Specified Position
     def set_background_tile(self, x: int, y: int, type: str):
@@ -94,7 +126,18 @@ class Bombs:
 
                 self.bombs.pop(index)
 
+                self.bombExploded(bomb["x"], bomb["y"])
+
         return explodedBombs
+    
+    # Handle Bomb Explosion
+    def bombExploded (self, x: int, y: int):
+        for bomb in self.bombs:
+            if math.dist([x, y], [bomb["x"], bomb["y"]]) <= BOMB_EXPLODE_RANGE:
+                if bomb["countdown"] > BOMB_CHAIN_COUNTDOWN:
+                    bomb["countdown"] = BOMB_CHAIN_COUNTDOWN
+                else:
+                    bomb["countdown"] = 1
 
     # Place A Bomb
     def placeBomb(self, player_id: str, x: int, y: int):
@@ -104,7 +147,7 @@ class Bombs:
             "x": x,
             "y": y,
 
-            "countdown": 150
+            "countdown": BOMB_COUNTDOWN
         })
 
 # The Player Object
@@ -115,18 +158,22 @@ class Player:
 
         # The position of the player is "virtual", the "virtual" size of each tile is 64 x 64 pixels.
         self.x = 32
-        self.y = 32
+        self.y = 32 
 
         self.angle = 0
         self.rotateDirection = -1
 
-        self.playerSize = Map.tileSize * 0.9
-
-        self.bombs = 2
+        self.bombs = PLAYER_BOMB_AMOUNT
         self.place_bomb_cooldown = 0
 
         self.Map = Map
         self.Bombs = Bombs
+
+        self.calculate_player_size()
+
+    # Calculate Player Size
+    def calculate_player_size(self):
+        self.player_size = self.Map.tile_size * 0.9
 
     # Update The Player
     def update(self):
@@ -200,7 +247,7 @@ class Player:
             self.Bombs.placeBomb(self.name, int(self.x), int(self.y))
 
             self.bombs -= 1
-            self.place_bomb_cooldown = 10
+            self.place_bomb_cooldown = 5
 
 # Check The Collision Between Two Rectangles
 def checkRect_collision(rect1, rect2):

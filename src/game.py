@@ -30,7 +30,7 @@ class Bomb(PaiaGame):
 
         self.Map.set_foreground_tile(2, 2, 'barrel')
         self.Map.set_foreground_tile(3, 2, 'barrel')
-        self.Map.set_foreground_tile(4, 2, 'barrel')
+        self.Map.set_foreground_tile(4, 2, 'rock')
         self.Map.set_foreground_tile(5, 2, 'barrel')
         self.Map.set_foreground_tile(6, 2, 'barrel')
 
@@ -55,9 +55,11 @@ class Bomb(PaiaGame):
                 create_asset_init_data('ground_dark', 64, 64, IMAGE_GROUND_DARK_PATH, IMAGE_GROUND_DARK_URL),
 
                 create_asset_init_data('barrel', 64, 64, IMAGE_BARREL_PATH, IMAGE_BARREL_URL),
+                create_asset_init_data('rock', 64, 64, IMAGE_ROCK_PATH, IMAGE_ROCK_URL),
 
                 create_asset_init_data('player', 64, 64, IMAGE_PLAYER_PATH, IMAGE_PLAYER_URL),
                 create_asset_init_data('bomb', 64, 64, IMAGE_BOMB_PATH, IMAGE_BOMB_URL),
+                create_asset_init_data('explosion_range', 128, 128, IMAGE_EXPLOSION_RANGE_PATH, IMAGE_EXPLOSION_RANGE_URL)
             ],
             "background": [
                 # create_image_view_data("bg", 0, 0, 1000, 500),
@@ -82,20 +84,23 @@ class Bomb(PaiaGame):
 
         for id, commands in players.items():
             if (commands != None):
+                for id in self.players:
+                        self.players[id].calculate_player_size()
+
                 self.players[id].update()
 
                 x = 0
                 y = 0
 
                 if 'move_left' in commands:
-                    x = -5
+                    x = -PLAYER_SPEED
                 elif 'move_right' in commands:
-                    x = 5
+                    x = PLAYER_SPEED
     
                 if 'move_up' in commands:
-                    y = -5
+                    y = -PLAYER_SPEED
                 elif 'move_down' in commands:
-                    y = 5 
+                    y = PLAYER_SPEED
 
                 self.players[id].move(x, y)
 
