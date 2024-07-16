@@ -20,6 +20,13 @@ IMAGE_ROCK_PATH = path.join(path.dirname(__file__), "../asset/image/rock.png")
 IMAGE_PLAYER_PATH = path.join(path.dirname(__file__), "../asset/image/player.png")
 IMAGE_BOMB_PATH = path.join(path.dirname(__file__), "../asset/image/bomb.png")
 IMAGE_EXPLOSION_RANGE_PATH = path.join(path.dirname(__file__), "../asset/image/explosion_range.png")
+IMAGE_EXPLOSION_1_PATH = path.join(path.dirname(__file__), "../asset/image/explosion_1.png")
+IMAGE_EXPLOSION_2_PATH = path.join(path.dirname(__file__), "../asset/image/explosion_2.png")
+IMAGE_EXPLOSION_3_PATH = path.join(path.dirname(__file__), "../asset/image/explosion_3.png")
+IMAGE_EXPLOSION_4_PATH = path.join(path.dirname(__file__), "../asset/image/explosion_4.png")
+IMAGE_EXPLOSION_5_PATH = path.join(path.dirname(__file__), "../asset/image/explosion_5.png")
+IMAGE_EXPLOSION_6_PATH = path.join(path.dirname(__file__), "../asset/image/explosion_6.png")
+IMAGE_EXPLOSION_7_PATH = path.join(path.dirname(__file__), "../asset/image/explosion_7.png")
 
 # Image URL
 
@@ -32,3 +39,10 @@ IMAGE_ROCK_URL = "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/m
 IMAGE_PLAYER_URL = "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/main/asset/image/player.png"
 IMAGE_BOMB_URL = "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/main/asset/image/bomb.png"
 IMAGE_EXPLOSION_RANGE_URL = path.join(path.dirname(__file__), "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/main/asset/image/explosion_range.png")
+IMAGE_EXPLOSION_1_URL = path.join(path.dirname(__file__), "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/main/asset/image/explosion_1.png")
+IMAGE_EXPLOSION_2_URL = path.join(path.dirname(__file__), "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/main/asset/image/explosion_2.png")
+IMAGE_EXPLOSION_3_URL = path.join(path.dirname(__file__), "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/main/asset/image/explosion_3.png")
+IMAGE_EXPLOSION_4_URL = path.join(path.dirname(__file__), "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/main/asset/image/explosion_4.png")
+IMAGE_EXPLOSION_5_URL = path.join(path.dirname(__file__), "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/main/asset/image/explosion_5.png")
+IMAGE_EXPLOSION_6_URL = path.join(path.dirname(__file__), "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/main/asset/image/explosion_6.png")
+IMAGE_EXPLOSION_7_URL = path.join(path.dirname(__file__), "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/main/asset/image/explosion_7.png")

@@ -59,7 +59,14 @@ class Bomb(PaiaGame):
 
                 create_asset_init_data('player', 64, 64, IMAGE_PLAYER_PATH, IMAGE_PLAYER_URL),
                 create_asset_init_data('bomb', 64, 64, IMAGE_BOMB_PATH, IMAGE_BOMB_URL),
-                create_asset_init_data('explosion_range', 128, 128, IMAGE_EXPLOSION_RANGE_PATH, IMAGE_EXPLOSION_RANGE_URL)
+                create_asset_init_data('explosion_range', 128, 128, IMAGE_EXPLOSION_RANGE_PATH, IMAGE_EXPLOSION_RANGE_URL),
+                create_asset_init_data('explosion_1', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_1_URL),
+                create_asset_init_data('explosion_2', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_2_URL),
+                create_asset_init_data('explosion_3', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_3_URL),
+                create_asset_init_data('explosion_4', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_4_URL),
+                create_asset_init_data('explosion_5', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_5_URL),
+                create_asset_init_data('explosion_6', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_6_URL),
+                create_asset_init_data('explosion_7', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_7_URL)
             ],
             "background": [
                 # create_image_view_data("bg", 0, 0, 1000, 500),
