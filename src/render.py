@@ -5,6 +5,7 @@ import math
 from mlgame.view.view_model import create_polygon_view_data, create_text_view_data, create_image_view_data
 
 from .objects import *
+from .env import *
 
 # Render The Game
 def render(width: int, height: int, Map: Map, Bombs: Bombs, players: MutableSequence[Player]):
@@ -55,7 +56,7 @@ def render(width: int, height: int, Map: Map, Bombs: Bombs, players: MutableSequ
         ))
 
         objects.append(create_image_view_data(
-            "bomb",
+            "bomb_flash" if int(bomb["countdown"] / BOMB_FLASH_LENGTH) % (BOMB_FLASH_INTERVAL) == 0 else "bomb",
 
             center_x - (bomb_size / 2),
             center_y - (bomb_size / 2),
@@ -120,6 +121,19 @@ def render(width: int, height: int, Map: Map, Bombs: Bombs, players: MutableSequ
             '#19d44b',
 
             str(round(Map.tile_size * 0.5)) + 'px Bold'
+        ))
+
+    explosion_cloud_size = Map.tile_size * 2
+
+    for explosion_cloud in Bombs.explosion_clouds:
+        objects.append(create_image_view_data(
+            "explosion_" + str(explosion_cloud["animation"]),
+
+            mapRenderX + (((Map.tile_size / 64) * explosion_cloud["x"]) - (explosion_cloud_size / 2)),
+            mapRenderY + (((Map.tile_size / 64) * explosion_cloud["y"]) - (explosion_cloud_size / 2)),
+
+            explosion_cloud_size,
+            explosion_cloud_size
         ))
 
     return objects

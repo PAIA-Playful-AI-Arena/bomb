@@ -16,6 +16,10 @@ class Map:
         "rock": "rock"
     }
 
+    DESTROYABLE_TYPES = [
+        "barrel"
+    ]
+
     def __init__(self, width: int = 10, height: int = 5): # 15 x 10
         self.width = width
         self.height = height
@@ -100,19 +104,27 @@ class Map:
         for y in range(self.height):
             for x in range(self.width):
                 if self.foreground_tiles[i] != "empty":
-                    tiles.append({ "type": self.foreground_tiles[i], "x": x, "y": y })
+                    tiles.append({ "type": self.foreground_tiles[i], "x": x, "y": y, "index": i })
 
                 i += 1
 
 
         return tiles
 
+    # Handle Bomb Explosion
+    def bomb_exploded(self, x: int, y: int):
+        tiles = self.get_foreground_tiles()
+
+        for tile in tiles:
+            if math.dist([x, y], [tile["x"] * 64, tile["y"] * 64]) < BOMB_EXPLODE_RANGE:
+                if tile["type"] in self.DESTROYABLE_TYPES:
+                    self.foreground_tiles[tile["index"]] = "empty"
+
 # The Bombs Object
 class Bombs:
     def __init__(self):
         self.bombs = []
-        self.explosions = []
-
+        self.explosion_clouds = []
 
     # Update The Bombs
     def update(self):
@@ -126,12 +138,28 @@ class Bombs:
 
                 self.bombs.pop(index)
 
-                self.bombExploded(bomb["x"], bomb["y"])
+                self.bomb_exploded(bomb["x"], bomb["y"])
+
+        for index, explosion_cloud in enumerate(self.explosion_clouds):
+            explosion_cloud["animation_cooldown"] -= 1
+
+            if explosion_cloud["animation_cooldown"] < 0:
+                explosion_cloud["animation"] += 1
+
+                explosion_cloud["animation_cooldown"] = 3
+
+                if explosion_cloud["animation"] == 7:
+                    self.explosion_clouds.pop(index)
 
         return explodedBombs
     
     # Handle Bomb Explosion
-    def bombExploded (self, x: int, y: int):
+    def bomb_exploded(self, x: int, y: int):
+        for i in range(BOMB_EXPLOSION_CLOUD_AMOUNT):
+            position = generate_random_position_in_circle(x, y, BOMB_EXPLODE_RANGE)
+
+            self.explosion_clouds.append({ "animation": 1, "animation_cooldown": 3, "x": position[0], "y": position[1] })
+
         for bomb in self.bombs:
             if math.dist([x, y], [bomb["x"], bomb["y"]]) <= BOMB_EXPLODE_RANGE:
                 if bomb["countdown"] > BOMB_CHAIN_COUNTDOWN:
@@ -161,7 +189,7 @@ class Player:
         self.y = 32 
 
         self.angle = 0
-        self.rotateDirection = -1
+        self.rotate_direction = -1
 
         self.bombs = PLAYER_BOMB_AMOUNT
         self.place_bomb_cooldown = 0
@@ -181,7 +209,7 @@ class Player:
             self.place_bomb_cooldown -= 1
 
     # Set The Position Of The Player
-    def setPosition (self, x: int, y: int):
+    def setPosition(self, x: int, y: int):
         self.x = x
         self.y = y
 
@@ -192,12 +220,12 @@ class Player:
 
             return
         else:
-            self.angle += self.rotateDirection
+            self.angle += self.rotate_direction
 
             if self.angle > 0.5:
-                self.rotateDirection = -0.15
+                self.rotate_direction = -0.15
             elif self.angle < -0.5:
-                self.rotateDirection = 0.1
+                self.rotate_direction = 0.1
 
         # Check map forground tiles collision
 
@@ -206,7 +234,7 @@ class Player:
         for tile in self.Map.get_foreground_tiles():
             if checkRect_collision(
                 # The player is not a square, so the collection for x and y is different.
-                { "x": self.x - (64 / 3), "y": self.y - (64 / 2), "width": 64 / 1.5, "height": 64 },
+                { "x": self.x - (64 / 3), "y": (self.y - (64 / 2)) + 10, "width": 64 / 1.5, "height": 54 },
                 { "x": tile["x"] * 64, "y": tile["y"] * 64, "width": 64, "height": 64 }
             ):
                 if self.x - (64 / 3) < tile["x"] + 64 or self.x + (64 / 1.5) > tile["x"]:
@@ -219,7 +247,7 @@ class Player:
         for tile in self.Map.get_foreground_tiles():
             # The player is not a square, so the collection for width and height is different.
             if checkRect_collision(
-                { "x": self.x - (64 / 3), "y": self.y - (64 / 2), "width": 64 / 1.5, "height": 64 },
+                { "x": self.x - (64 / 3), "y": (self.y - (64 / 2)) + 10, "width": 64 / 1.5, "height": 54},
                 { "x": tile["x"] * 64, "y": tile["y"] * 64, "width": 64, "height": 64 }
             ):
                 if self.y - (64 / 2) < tile["y"] + 64 or self.y + (64 / 2) > tile["y"]:
@@ -262,3 +290,12 @@ def checkRect_collision(rect1, rect2):
         return False
 
     return True
+
+# Generate A Random Position In A Circle
+def generate_random_position_in_circle(x: int, y: int, radius: int):
+    ang = random.uniform(0, 1) * 2 * math.pi
+    hyp = math.sqrt(random.uniform(0, 1)) * radius
+    adj = math.cos(ang) * hyp
+    opp = math.sin(ang) * hyp
+
+    return [x + adj, y + opp]

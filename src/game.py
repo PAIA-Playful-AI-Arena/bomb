@@ -28,11 +28,31 @@ class Bomb(PaiaGame):
 
         self.Map.calculate_tile_size(width, height)
 
+        self.Map.set_foreground_tile(1, 1, 'barrel')
+        self.Map.set_foreground_tile(1, 2, 'barrel')
+        self.Map.set_foreground_tile(2, 1, 'barrel')
         self.Map.set_foreground_tile(2, 2, 'barrel')
-        self.Map.set_foreground_tile(3, 2, 'barrel')
+
+        self.Map.set_foreground_tile(4, 1, 'rock')
         self.Map.set_foreground_tile(4, 2, 'rock')
-        self.Map.set_foreground_tile(5, 2, 'barrel')
-        self.Map.set_foreground_tile(6, 2, 'barrel')
+
+        self.Map.set_foreground_tile(6, 1, 'barrel')
+        self.Map.set_foreground_tile(6, 2, 'rock')
+        self.Map.set_foreground_tile(7, 1, 'rock')
+        self.Map.set_foreground_tile(7, 2, 'barrel')
+        self.Map.set_foreground_tile(8, 1, 'barrel')
+        self.Map.set_foreground_tile(8, 2, 'rock')
+
+        self.Map.set_foreground_tile(0, 4, 'barrel')
+        self.Map.set_foreground_tile(1, 4, 'rock')
+        self.Map.set_foreground_tile(2, 4, 'barrel')
+        self.Map.set_foreground_tile(3, 4, 'rock')
+        self.Map.set_foreground_tile(4, 4, 'barrel')
+        self.Map.set_foreground_tile(5, 4, 'rock')
+        self.Map.set_foreground_tile(6, 4, 'barrel')
+        self.Map.set_foreground_tile(7, 4, 'rock')
+        self.Map.set_foreground_tile(8, 4, 'barrel')
+        self.Map.set_foreground_tile(9, 4, 'rock')
 
 
         # Initialize players data.
@@ -59,14 +79,15 @@ class Bomb(PaiaGame):
 
                 create_asset_init_data('player', 64, 64, IMAGE_PLAYER_PATH, IMAGE_PLAYER_URL),
                 create_asset_init_data('bomb', 64, 64, IMAGE_BOMB_PATH, IMAGE_BOMB_URL),
+                create_asset_init_data('bomb_flash', 64, 64, IMAGE_BOMB_FLASH_PATH, IMAGE_BOMB_FLASH_URL),
                 create_asset_init_data('explosion_range', 128, 128, IMAGE_EXPLOSION_RANGE_PATH, IMAGE_EXPLOSION_RANGE_URL),
                 create_asset_init_data('explosion_1', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_1_URL),
-                create_asset_init_data('explosion_2', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_2_URL),
-                create_asset_init_data('explosion_3', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_3_URL),
-                create_asset_init_data('explosion_4', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_4_URL),
-                create_asset_init_data('explosion_5', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_5_URL),
-                create_asset_init_data('explosion_6', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_6_URL),
-                create_asset_init_data('explosion_7', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_7_URL)
+                create_asset_init_data('explosion_2', 64, 64, IMAGE_EXPLOSION_2_PATH, IMAGE_EXPLOSION_2_URL),
+                create_asset_init_data('explosion_3', 64, 64, IMAGE_EXPLOSION_3_PATH, IMAGE_EXPLOSION_3_URL),
+                create_asset_init_data('explosion_4', 64, 64, IMAGE_EXPLOSION_4_PATH, IMAGE_EXPLOSION_4_URL),
+                create_asset_init_data('explosion_5', 64, 64, IMAGE_EXPLOSION_5_PATH, IMAGE_EXPLOSION_5_URL),
+                create_asset_init_data('explosion_6', 64, 64, IMAGE_EXPLOSION_6_PATH, IMAGE_EXPLOSION_6_URL),
+                create_asset_init_data('explosion_7', 64, 64, IMAGE_EXPLOSION_7_PATH, IMAGE_EXPLOSION_7_URL)
             ],
             "background": [
                 # create_image_view_data("bg", 0, 0, 1000, 500),
@@ -89,10 +110,12 @@ class Bomb(PaiaGame):
         for explodedBomb in explodedBombs:
             self.players[explodedBomb["owner"]].bombs += 1
 
+            self.Map.bomb_exploded(explodedBomb["x"], explodedBomb["y"])
+
         for id, commands in players.items():
             if (commands != None):
                 for id in self.players:
-                        self.players[id].calculate_player_size()
+                    self.players[id].calculate_player_size()
 
                 self.players[id].update()
 
