@@ -28,6 +28,8 @@ class Map:
 
         self.background_tiles = []
         self.foreground_tiles = [] 
+
+        self.camera_shake = 0
         
         for _ in range(width * height):
             if random.randint(0, 2) > 0:
@@ -108,11 +110,16 @@ class Map:
 
                 i += 1
 
-
         return tiles
+
+    # Update The Map
+    def update(self):
+        self.camera_shake = self.camera_shake * 0.9
 
     # Handle Bomb Explosion
     def bomb_exploded(self, x: int, y: int):
+        self.camera_shake += CAMERA_SHAKE
+
         tiles = self.get_foreground_tiles()
 
         for tile in tiles:

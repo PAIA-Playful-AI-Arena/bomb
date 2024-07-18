@@ -1,5 +1,6 @@
 from collections.abc import MutableSequence
 import pygame
+import random
 import math
 
 from mlgame.view.view_model import create_polygon_view_data, create_text_view_data, create_image_view_data
@@ -13,8 +14,8 @@ def render(width: int, height: int, Map: Map, Bombs: Bombs, players: MutableSequ
 
     # Render The Map
 
-    mapRenderX = round((width / 2) - ((Map.width / 2) * Map.tile_size), 0)
-    mapRenderY = round((height / 2) - ((Map.height / 2) * Map.tile_size), 0)
+    mapRenderX = round((width / 2) - ((Map.width / 2) * Map.tile_size), 0) + random.randint(int(-Map.camera_shake), int(Map.camera_shake))
+    mapRenderY = round((height / 2) - ((Map.height / 2) * Map.tile_size), 0) + random.randint(int(-Map.camera_shake), int(Map.camera_shake))
 
     render_x = mapRenderX 
     render_y = mapRenderY 

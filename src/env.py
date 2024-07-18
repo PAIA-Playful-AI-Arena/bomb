@@ -13,6 +13,8 @@ BOMB_FLASH_LENGTH = 10
 BOMB_FLASH_INTERVAL = 2
 BOMB_EXPLOSION_CLOUD_AMOUNT = 3
 
+CAMERA_SHAKE = 1
+
 # Image Path
 
 IMAGE_GROUND_LIGHT_PATH = path.join(path.dirname(__file__), "../asset/image/ground_light.png")

@@ -1,4 +1,3 @@
-from os import path
 import pygame
 
 from mlgame.game.paia_game import GameStatus, PaiaGame
@@ -104,6 +103,8 @@ class Bomb(PaiaGame):
         #ai_1p_cmd = commands[self.ai_clients()[0]["name"]]
         #command = (PlatformAction(ai_1p_cmd)
         #           if ai_1p_cmd in PlatformAction.__members__ else PlatformAction.NONE)
+
+        self.Map.update()
 
         explodedBombs = self.Bombs.update()
 
