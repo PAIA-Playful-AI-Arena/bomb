@@ -137,4 +137,42 @@ def render(width: int, height: int, Map: Map, Bombs: Bombs, players: MutableSequ
             explosion_cloud_size
         ))
 
+    ui_size = (width + height) / 100
+
+    text_x = ui_size
+
+    for player in players:
+        objects.append(create_text_view_data(
+           player.name + ': ' + str(player.score),
+
+           text_x,
+           ui_size * 0.75,
+
+           '#ffffff',
+
+           str(round(ui_size * 2.5)) + 'px Bold'
+        ))
+
+        bomb_x = text_x
+        bomb_y = ui_size * 2.5
+
+        for i in range(player.bombs):
+            objects.append(create_image_view_data(
+                'bomb_icon',
+
+                bomb_x,
+                bomb_y,
+
+                ui_size * 1.5,
+                ui_size * 1.5
+            ))
+
+            bomb_x += ui_size * 1.25
+
+            if (bomb_x + (ui_size * 1.25) >= text_x + ((width - (ui_size * 2)) / len(players)) or bomb_x + (ui_size * 1.25) >= width):
+                bomb_x = text_x
+                bomb_y += ui_size * 1.5
+
+        text_x += (width - (ui_size * 2)) / len(players)
+
     return objects

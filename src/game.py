@@ -12,7 +12,7 @@ from .env import *
 # The Game Itself
 class Bomb(PaiaGame):
     # Initialize The Game
-    def __init__(self, width: int = 750, height: int = 500, players: int = 1, *args, **kwargs): # 750 x 500
+    def __init__(self, width: int = 750, height: int = 500, players: int = 4, *args, **kwargs): # 750 x 500
         super().__init__(user_num=players)
 
         self.frame_count = 0
@@ -79,6 +79,7 @@ class Bomb(PaiaGame):
                 create_asset_init_data('player', 64, 64, IMAGE_PLAYER_PATH, IMAGE_PLAYER_URL),
                 create_asset_init_data('bomb', 64, 64, IMAGE_BOMB_PATH, IMAGE_BOMB_URL),
                 create_asset_init_data('bomb_flash', 64, 64, IMAGE_BOMB_FLASH_PATH, IMAGE_BOMB_FLASH_URL),
+                create_asset_init_data('bomb_icon', 64, 64, IMAGE_BOMB_ICON_PATH, IMAGE_BOMB_ICON_URL),
                 create_asset_init_data('explosion_range', 128, 128, IMAGE_EXPLOSION_RANGE_PATH, IMAGE_EXPLOSION_RANGE_URL),
                 create_asset_init_data('explosion_1', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_1_URL),
                 create_asset_init_data('explosion_2', 64, 64, IMAGE_EXPLOSION_2_PATH, IMAGE_EXPLOSION_2_URL),
@@ -238,5 +239,8 @@ class Bomb(PaiaGame):
     @staticmethod
     def ai_clients():
         return [
-            { "name": "1P" }
+            { "name": "1P" },
+            { "name": "2P" },
+            { "name": "3P" },
+            { "name": "4P" }
         ]
