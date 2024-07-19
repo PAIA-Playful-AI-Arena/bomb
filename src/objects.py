@@ -276,6 +276,16 @@ class Player:
         elif self.y + (64 / 2) > self.Map.height * 64:
             self.y = (self.Map.height * 64) - (64 / 2)  
 
+    # Handle Bomb Explosion
+    def bomb_exploded(self, owner: str, x: int, y: int):
+        if owner != self.name:
+            if math.dist([x, y], [self.x, self.y]) <= BOMB_EXPLODE_RANGE:
+                self.score -= 1
+
+                return True
+
+        return False
+
     # Place A Bomb
     def place_bomb(self):
         if self.bombs > 0 and self.place_bomb_cooldown <= 0:

@@ -12,7 +12,7 @@ from .env import *
 # The Game Itself
 class Bomb(PaiaGame):
     # Initialize The Game
-    def __init__(self, width: int = 750, height: int = 500, players: int = 4, *args, **kwargs): # 750 x 500
+    def __init__(self, width: int = 750, height: int = 500, players: int = 2, *args, **kwargs): # 750 x 500
         super().__init__(user_num=players)
 
         self.frame_count = 0
@@ -107,12 +107,20 @@ class Bomb(PaiaGame):
 
         self.Map.update()
 
-        explodedBombs = self.Bombs.update()
+        exploded_bombs = self.Bombs.update()
 
-        for explodedBomb in explodedBombs:
-            self.players[explodedBomb["owner"]].bombs += 1
+        for exploded_bomb in exploded_bombs:
+            self.players[exploded_bomb["owner"]].bombs += 1
 
-            self.Map.bomb_exploded(explodedBomb["x"], explodedBomb["y"])
+            self.Map.bomb_exploded(exploded_bomb["x"], exploded_bomb["y"])
+
+            score_increase = 0
+
+            for _, player in self.players.items():
+                if player.bomb_exploded(exploded_bomb["owner"], exploded_bomb["x"], exploded_bomb["y"]):
+                    score_increase += 2
+            
+            self.players[exploded_bomb["owner"]].score += score_increase
 
         for id, commands in players.items():
             if (commands != None):
@@ -240,7 +248,5 @@ class Bomb(PaiaGame):
     def ai_clients():
         return [
             { "name": "1P" },
-            { "name": "2P" },
-            { "name": "3P" },
-            { "name": "4P" }
+            { "name": "2P" }
         ]
