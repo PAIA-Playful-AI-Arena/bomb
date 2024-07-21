@@ -187,13 +187,15 @@ class Bombs:
 
 # The Player Object
 class Player:
-    def __init__(self, Map: Map, Bombs: Bombs, name: str):
+    def __init__(self, Map: Map, Bombs: Bombs, name: str, spawnX: int, spawnY: int):
         self.name = name
         self.score = 0 
 
         # The position of the player is "virtual", the "virtual" size of each tile is 64 x 64 pixels.
-        self.x = 32
-        self.y = 32 
+        self.spawnX = spawnX
+        self.spawnY = spawnY
+        self.x = spawnX
+        self.y = spawnY
 
         self.angle = 0
         self.rotate_direction = -1
@@ -281,6 +283,9 @@ class Player:
         if owner != self.name:
             if math.dist([x, y], [self.x, self.y]) <= BOMB_EXPLODE_RANGE:
                 self.score -= 1
+
+                self.x = self.spawnX
+                self.y = self.spawnY
 
                 return True
 

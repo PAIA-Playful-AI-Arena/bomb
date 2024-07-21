@@ -3,7 +3,7 @@ from os import path
 # Settings
 
 PLAYER_SPEED = 5
-PLAYER_BOMB_AMOUNT = 50
+PLAYER_BOMB_AMOUNT = 2
 
 BOMB_COUNTDOWN = 150
 BOMB_CHAIN_COUNTDOWN = 15 # The countdown of chain explosions

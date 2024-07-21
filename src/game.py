@@ -61,7 +61,16 @@ class Bomb(PaiaGame):
         for i in range(players):
             id = str(i + 1) + 'P'
 
-            self.players[id] = Player(self.Map, self.Bombs, id)
+            match i:
+                case 0:
+                    self.players[id] = Player(self.Map, self.Bombs, id, 32, 32)
+                case 1:
+                    self.players[id] = Player(self.Map, self.Bombs, id, (self.Map.width * 64) - 32, 32)
+                case 2:
+                    self.players[id] = Player(self.Map, self.Bombs, id, 32, (self.Map.height * 64) - 32)
+                case 3:
+                    self.players[id] = Player(self.Map, self.Bombs, id, (self.Map.width * 64) - 32, (self.Map.height * 64) - 32)
+
 
         self.scene = Scene(width, height, '#211711') 
 

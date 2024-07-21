@@ -14,14 +14,14 @@ def render(width: int, height: int, Map: Map, Bombs: Bombs, players: MutableSequ
 
     # Render The Map
 
-    mapRenderX = round((width / 2) - ((Map.width / 2) * Map.tile_size), 0) + random.randint(int(-Map.camera_shake), int(Map.camera_shake))
-    mapRenderY = round((height / 2) - ((Map.height / 2) * Map.tile_size), 0) + random.randint(int(-Map.camera_shake), int(Map.camera_shake))
+    map_render_x = round((width / 2) - ((Map.width / 2) * Map.tile_size), 0) + random.randint(int(-Map.camera_shake), int(Map.camera_shake))
+    map_render_y = round((height / 2) - ((Map.height / 2) * Map.tile_size), 0) + random.randint(int(-Map.camera_shake), int(Map.camera_shake))
 
-    render_x = mapRenderX 
-    render_y = mapRenderY 
+    render_x = map_render_x 
+    render_y = map_render_y 
 
     for y in range(Map.height):
-        render_x = mapRenderX
+        render_x = map_render_x
 
         for x in range(Map.width):
             background_tile = Map.TILE_TYPES[Map.get_background_tile(x, y)]
@@ -43,8 +43,8 @@ def render(width: int, height: int, Map: Map, Bombs: Bombs, players: MutableSequ
     explode_range_size = ((Map.tile_size / 64) * BOMB_EXPLODE_RANGE) * 2
 
     for bomb in Bombs.bombs:
-        center_x = mapRenderX + ((Map.tile_size / 64) * bomb["x"])
-        center_y = mapRenderY + ((Map.tile_size / 64) * bomb["y"])
+        center_x = map_render_x + ((Map.tile_size / 64) * bomb["x"])
+        center_y = map_render_y + ((Map.tile_size / 64) * bomb["y"])
 
         objects.append(create_image_view_data(
             "explosion_range",
@@ -90,8 +90,8 @@ def render(width: int, height: int, Map: Map, Bombs: Bombs, players: MutableSequ
     font.set_bold(True)
 
     for player in players:
-        render_x = mapRenderX + (((Map.tile_size / 64) * player.x) - (player.player_size / 2))
-        render_y = mapRenderY + (((Map.tile_size / 64) * player.y) - (player.player_size / 2))
+        render_x = map_render_x + (((Map.tile_size / 64) * player.x) - (player.player_size / 2))
+        render_y = map_render_y + (((Map.tile_size / 64) * player.y) - (player.player_size / 2))
 
         if player.angle != 0:
             render_x -= player.player_size / 8
@@ -116,8 +116,8 @@ def render(width: int, height: int, Map: Map, Bombs: Bombs, players: MutableSequ
         objects.append(create_text_view_data(
             player.name,
 
-            int(mapRenderX + (((Map.tile_size / 64) * player.x) - (size[0] / 2))),
-            int(mapRenderY + (((Map.tile_size / 64) * player.y) - (player.player_size * 0.9))),
+            int(map_render_x + (((Map.tile_size / 64) * player.x) - (size[0] / 2))),
+            int(map_render_y + (((Map.tile_size / 64) * player.y) - (player.player_size * 0.9))),
 
             '#19d44b',
 
@@ -130,8 +130,8 @@ def render(width: int, height: int, Map: Map, Bombs: Bombs, players: MutableSequ
         objects.append(create_image_view_data(
             "explosion_" + str(explosion_cloud["animation"]),
 
-            mapRenderX + (((Map.tile_size / 64) * explosion_cloud["x"]) - (explosion_cloud_size / 2)),
-            mapRenderY + (((Map.tile_size / 64) * explosion_cloud["y"]) - (explosion_cloud_size / 2)),
+            map_render_x + (((Map.tile_size / 64) * explosion_cloud["x"]) - (explosion_cloud_size / 2)),
+            map_render_y + (((Map.tile_size / 64) * explosion_cloud["y"]) - (explosion_cloud_size / 2)),
 
             explosion_cloud_size,
             explosion_cloud_size
@@ -145,8 +145,8 @@ def render(width: int, height: int, Map: Map, Bombs: Bombs, players: MutableSequ
         objects.append(create_text_view_data(
            player.name + ': ' + str(player.score),
 
-           text_x,
-           ui_size * 0.75,
+           int(text_x),
+           int(ui_size * 0.75),
 
            '#ffffff',
 
