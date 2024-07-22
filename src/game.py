@@ -174,7 +174,7 @@ class Bomb(PaiaGame):
                 "score": player.score,
 
                 "x": player.x,
-                "y": player.y
+                "y": player.yㄊ
             }
 
         return to_players_data
