@@ -1,3 +1,4 @@
+from os import path
 import pygame
 
 from mlgame.game.paia_game import GameStatus, PaiaGame
@@ -12,7 +13,7 @@ from .env import *
 # The Game Itself
 class Bomb(PaiaGame):
     # Initialize The Game
-    def __init__(self, width: int = 750, height: int = 500, players: int = 2, *args, **kwargs): # 750 x 500
+    def __init__(self, width: int = 750, height: int = 500, level_file: str = path.join(path.dirname(__file__), 'level/1.json'), players: int = 2, *args, **kwargs): # 750 x 500
         super().__init__(user_num=players)
 
         self.frame_count = 0

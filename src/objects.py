@@ -243,7 +243,7 @@ class Player:
         for tile in self.Map.get_foreground_tiles():
             if checkRect_collision(
                 # The player is not a square, so the collection for x and y is different.
-                { "x": self.x - (64 / 3), "y": (self.y - (64 / 2)) + 10, "width": 64 / 1.5, "height": 54 },
+                { "x": self.x - (64 / 3), "y": (self.y - (64 / 2)) + 20, "width": 64 / 1.5, "height": 44 },
                 { "x": tile["x"] * 64, "y": tile["y"] * 64, "width": 64, "height": 64 }
             ):
                 if self.x - (64 / 3) < tile["x"] + 64 or self.x + (64 / 1.5) > tile["x"]:
@@ -256,7 +256,7 @@ class Player:
         for tile in self.Map.get_foreground_tiles():
             # The player is not a square, so the collection for width and height is different.
             if checkRect_collision(
-                { "x": self.x - (64 / 3), "y": (self.y - (64 / 2)) + 10, "width": 64 / 1.5, "height": 54},
+                { "x": self.x - (64 / 3), "y": (self.y - (64 / 2)) + 20, "width": 64 / 1.5, "height": 44},
                 { "x": tile["x"] * 64, "y": tile["y"] * 64, "width": 64, "height": 64 }
             ):
                 if self.y - (64 / 2) < tile["y"] + 64 or self.y + (64 / 2) > tile["y"]:
@@ -273,8 +273,8 @@ class Player:
             self.x = (self.Map.width * 64) - (64 / 3)
 
         # The player is not a square, so the collection for x and y is different.
-        if self.y - (64 / 2) < 0:
-            self.y = 64 / 2
+        if self.y - (64 / 2) + 20 < 0:
+            self.y = (64 / 2) - 20
         elif self.y + (64 / 2) > self.Map.height * 64:
             self.y = (self.Map.height * 64) - (64 / 2)  
 
