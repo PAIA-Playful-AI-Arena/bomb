@@ -129,6 +129,28 @@ class Players:
             
         return teams_score
 
+    # Get The Winning Team
+    def get_winning_team(self):
+        team = None
+        team_score = None
+
+        for team_id, score in self.get_teams_score().items():
+            if team == None or score > team_score:
+                team = team_id
+                team_score = score
+
+        return team
+
+    # Get Enemies Position
+    def get_enemies_position(self, team: int):
+        positions = []
+
+        for _, player_data in self.players_data.items():
+            if player_data["team"] != team:
+                positions.append({ "x": player_data["x"], "y": player_data["y"] })
+
+        return positions
+
     # Bomb Exploded
     def bomb_exploded(self, owner: str, x: int, y: int):
         if owner not in self.players_data:
@@ -142,50 +164,66 @@ class Players:
 
                 player_data["score"] -= 1
 
+                spawns = []
+
+                for index, spawn_position in enumerate(self.Level.Map["player_spawns"]):
+                    distance = 0
+
+                    for player_position in self.get_enemies_position(player_data["team"]):
+                        distance += math.dist([spawn_position.x * 64, spawn_position.y * 64], [player_position["x"], player_position["y"]])
+
+                    spawns.append({ "index": index, "distance": distance })
+
+                spawns.sort(key = sort_spawns, reverse = True)
+
+                player_data["x"] = (self.Level.Map["player_spawns"][spawns[0]["index"]].x * 64) + 32
+                player_data["y"] = (self.Level.Map["player_spawns"][spawns[0]["index"]].y * 64) + 32
+
 
     # Update The Players
     def update(self, commands: dict, foreground_tiles: list): 
         for player_name, actions in commands.items():
-            if "move_left" in actions:
-                self.move(player_name, "left", foreground_tiles)
-            elif "move_right" in actions:
-                self.move(player_name, "right", foreground_tiles)
-            
-            if "move_up" in actions:
-                self.move(player_name, "up", foreground_tiles)
-            elif "move_down" in actions:
-                self.move(player_name, "down", foreground_tiles)
-
-            # The player walking animation.
-            # "angle" is the actual angle of the player, "target_angle" is just for animation purpose.
-
-            player_data = self.players_data[player_name]
- 
-            # Check if the player moved.
-            if "move_left" in actions or "move_right" in actions or "move_up" in actions or "move_down" in actions:
-                if player_data["rotate_speed"] == 0:
-                    if "move_left" in actions or "move_up" in actions:
-                        player_data["rotate_speed"] = self.Level.Rules["player_speed"] / 33.33333
-                    else:
-                        player_data["rotate_speed"] = -self.Level.Rules["player_speed"] / 33.33333
-
-                player_data["target_angle"] += player_data["rotate_speed"]
-
-                if player_data["target_angle"] > 0.5:
-                    player_data["target_angle"] = 0.5
-                    player_data["rotate_speed"] = -player_data["rotate_speed"]
-                elif player_data["target_angle"] < -0.5:
-                    player_data["target_angle"] = -0.5
-                    player_data["rotate_speed"] = -player_data["rotate_speed"]
-
-            else:
-                player_data["target_angle"] = 0
-                player_data["rotate_speed"] = 0 
-
-            player_data["angle"] += (player_data["target_angle"] - player_data["angle"]) / 1.5
-
-            if player_data["place_bomb_cooldown"] > 0:
-                player_data["place_bomb_cooldown"] -= 1
+            if actions != None:
+                if "move_left" in actions:
+                    self.move(player_name, "left", foreground_tiles)
+                elif "move_right" in actions:
+                    self.move(player_name, "right", foreground_tiles)
+                
+                if "move_up" in actions:
+                    self.move(player_name, "up", foreground_tiles)
+                elif "move_down" in actions:
+                    self.move(player_name, "down", foreground_tiles)
+    
+                # The player walking animation.
+                # "angle" is the actual angle of the player, "target_angle" is just for animation purpose.
+    
+                player_data = self.players_data[player_name]
+     
+                # Check if the player moved.
+                if "move_left" in actions or "move_right" in actions or "move_up" in actions or "move_down" in actions:
+                    if player_data["rotate_speed"] == 0:
+                        if "move_left" in actions or "move_down" in actions:
+                            player_data["rotate_speed"] = self.Level.Rules["player_speed"] / 33.33333
+                        else:
+                            player_data["rotate_speed"] = -self.Level.Rules["player_speed"] / 33.33333
+    
+                    player_data["target_angle"] += player_data["rotate_speed"]
+    
+                    if player_data["target_angle"] > 0.5:
+                        player_data["target_angle"] = 0.5
+                        player_data["rotate_speed"] = -player_data["rotate_speed"]
+                    elif player_data["target_angle"] < -0.5:
+                        player_data["target_angle"] = -0.5
+                        player_data["rotate_speed"] = -player_data["rotate_speed"]
+    
+                else:
+                    player_data["target_angle"] = 0
+                    player_data["rotate_speed"] = 0 
+    
+                player_data["angle"] += (player_data["target_angle"] - player_data["angle"]) / 1.5
+    
+                if player_data["place_bomb_cooldown"] > 0:
+                    player_data["place_bomb_cooldown"] -= 1
 
         # Update the team score.
 
@@ -345,3 +383,7 @@ def check_collision(rect1: dict, rects: list):
             return True
 
     return False
+
+# Sort Spawns 
+def sort_spawns(item: dict):
+    return item["distance"]

@@ -65,16 +65,16 @@ class Bombs:
                 if bomb_data["countdown"] > math.floor(self.Level.Rules["bomb_countdown"] / 10):
                     bomb_data["countdown"] = math.floor(self.Level.Rules["bomb_countdown"] / 10)
                 else:
-                    bomb_data["countdown"] = -1 
-
+                    bomb_data["countdown"] = -1
 
         return
 
     # Upate The Bombs
     def update(self, commands: dict):
         for player_name, actions in commands.items():
-            if "place_bomb" in actions:
-                self.place_bomb(player_name)
+            if actions != None:
+                if "place_bomb" in actions:
+                    self.place_bomb(player_name)
 
         # Update the bombs.
 
@@ -131,7 +131,7 @@ class Bombs:
             render_y = map_render_offset_y + ((tile_size / 64) * bomb_data["y"])
 
             objects_info.append({
-                "layer": 5,
+                "layer": 4,
                 "object": create_image_view_data(
                     "explosion_range",
 
@@ -144,7 +144,7 @@ class Bombs:
             })
 
             objects_info.append({
-                "layer": 6,
+                "layer": 5,
                 "object": create_image_view_data(
                     "bomb_flash" if bomb_data["flash"] else "bomb",
 
@@ -171,7 +171,7 @@ class Bombs:
 
             if (len(points) >= 3):
                 objects_info.append({
-                    "layer": 7,
+                    "layer": 5,
                     "object": create_polygon_view_data(
                         "bomb_countdown",
 

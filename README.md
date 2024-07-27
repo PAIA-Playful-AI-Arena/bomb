@@ -30,7 +30,7 @@ Game(level_name: str, level_file: Union[None, str], width: int = 750, height: in
   * 只在玩家數量為 2 個以上時才有用，在 3 個玩家時會有一對只有一個玩家。
 
 ## 關卡參數
-我們有自己的關卡檔案格式，以下為一個簡單的範例：
+我們有自己的關卡檔案格式 (.bomb)，以下為一個簡單的範例：
 ```
 [Rules]
 | player_speed: number(5)

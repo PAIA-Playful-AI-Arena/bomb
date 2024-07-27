@@ -1,6 +1,6 @@
 from mlgame.game.paia_game import PaiaGame, GameStatus, Scene
 from typing import Union
-from os import path
+from os import path, stat
 
 from .objects.players import Players
 from .objects.bombs import Bombs
@@ -10,7 +10,7 @@ from .level import Level
 # The Game Itself
 class Game(PaiaGame):
     # Initialize The Game
-    def __init__(self, level_name: str, level_file: Union[None, str], width: int = 750, height: int = 500, user_num: int = 1, game_duration: int = 1800, team_mode: str = "off", *args, **kwargs):
+    def __init__(self, level_name: str, level_file: Union[None, str], width: int = 750, height: int = 500, user_num: int = 1, game_duration: int = 10, team_mode: str = "off", *args, **kwargs):
         super().__init__(user_num = user_num)
 
         if level_file == None:
@@ -26,6 +26,7 @@ class Game(PaiaGame):
         self.Bombs = Bombs(self.Level, self.Map, self.Players)
 
         self.scene = Scene(self.width, self.height, "#211711")
+        self.game_duration = game_duration
         self.frame_count = 0
 
     # Initialize The Scene
@@ -45,13 +46,6 @@ class Game(PaiaGame):
 
         return scene_init_data
 
-    @staticmethod
-    def ai_clients():
-        return [
-            { "name": "1P" },
-            { "name": "2P" }
-        ]
-
     # Update The Game
     def update(self, commands):
         foreground_tiles = self.Map.get_foreground_tiles_with_position()
@@ -60,27 +54,40 @@ class Game(PaiaGame):
         self.Players.update(commands, foreground_tiles)
         self.Bombs.update(commands)
 
+        self.frame_count += 1
+
         return
 
     # Get The Data For The Players
     def get_data_from_game_to_player(self):
         to_players_data = {}
 
-        for name, data in self.Players.players_data.items():
-            to_players_data[name] = {
-                "status": GameStatus.GAME_ALIVE,
+        winning_team = self.Players.get_winning_team()
+
+        for player_name, player_data in self.Players.players_data.items():
+            status = GameStatus.GAME_ALIVE
+
+            if self.frame_count >= self.game_duration:
+                if player_data["team"] == winning_team:
+                    status = GameStatus.GAME_PASS
+                else:
+                    status = GameStatus.GAME_OVER
+
+            to_players_data[player_name] = {
+                "status": status,
                 "frame": self.frame_count,
 
-                "team": data["team"],
+                "team": player_data["team"],
 
-                "score": data["score"],
-                "bombs": data["bombs"],
+                "score": player_data["score"],
+                "bombs": player_data["bombs"],
 
-                "x": data["x"],
-                "y": data["y"]
+                "x": player_data["x"],
+                "y": player_data["y"]
             }
 
         return to_players_data
+
 
     # Get The Scene Progress Data (Render)
     def get_scene_progress_data(self):
@@ -111,17 +118,13 @@ class Game(PaiaGame):
             "game_sys_info": {}
         }
 
-    # Get The Game Status
-    def get_game_status(self):
-        # TODO return game status
-
-        return GameStatus.GAME_ALIVE
-
     # Get The Game Result
     def get_game_result(self):
+        print(True)
+
         return {
             "frame_used": self.frame_count,
-            "status": self.game_result_state,
+            "status": GameStatus.GAME_ALIVE if self.frame_count < self.game_duration else GameStatus.GAME_OVER,
             "attachment": [
                 {
                     "player_num": "1P"
