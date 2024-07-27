@@ -1,258 +1,49 @@
+from mlgame.game.paia_game import PaiaGame, GameStatus, Scene
+from typing import Union
 from os import path
-import pygame
 
-from mlgame.game.paia_game import GameStatus, PaiaGame
-from mlgame.view.decorator import check_game_progress, check_game_result
-from mlgame.view.view_model import Scene, create_asset_init_data
-
-from .render import render
-from .objects import *
-
-from .env import *
+from .objects.players import Players
+from .objects.bombs import Bombs
+from .objects.map import Map 
+from .level import Level
 
 # The Game Itself
-class Bomb(PaiaGame):
+class Game(PaiaGame):
     # Initialize The Game
-    def __init__(self, width: int = 750, height: int = 500, level_file: str = path.join(path.dirname(__file__), 'level/1.json'), players: int = 2, *args, **kwargs): # 750 x 500
-        super().__init__(user_num=players)
+    def __init__(self, level_name: str, level_file: Union[None, str], width: int = 750, height: int = 500, user_num: int = 1, game_duration: int = 1800, team_mode: str = "off", *args, **kwargs):
+        super().__init__(user_num = user_num)
 
-        self.frame_count = 0
+        if level_file == None:
+            level_file = path.join(path.dirname(__file__), "levels/" + level_name + ".bomb")
 
+        self.Level = Level(level_file)
+ 
         self.width = width
         self.height = height
+        
+        self.Map = Map(self.Level, width, height)
+        self.Players = Players(self.Level, user_num, team_mode == "on")
+        self.Bombs = Bombs(self.Level, self.Map, self.Players)
 
-        # Initialize game objects.
+        self.scene = Scene(self.width, self.height, "#211711")
+        self.frame_count = 0
 
-        self.Map = Map()
-        self.Bombs = Bombs()
-
-        self.Map.calculate_tile_size(width, height)
-
-        self.Map.set_foreground_tile(1, 1, 'barrel')
-        self.Map.set_foreground_tile(1, 2, 'barrel')
-        self.Map.set_foreground_tile(2, 1, 'barrel')
-        self.Map.set_foreground_tile(2, 2, 'barrel')
-
-        self.Map.set_foreground_tile(4, 1, 'rock')
-        self.Map.set_foreground_tile(4, 2, 'rock')
-
-        self.Map.set_foreground_tile(6, 1, 'barrel')
-        self.Map.set_foreground_tile(6, 2, 'rock')
-        self.Map.set_foreground_tile(7, 1, 'rock')
-        self.Map.set_foreground_tile(7, 2, 'barrel')
-        self.Map.set_foreground_tile(8, 1, 'barrel')
-        self.Map.set_foreground_tile(8, 2, 'rock')
-
-        self.Map.set_foreground_tile(0, 4, 'barrel')
-        self.Map.set_foreground_tile(1, 4, 'rock')
-        self.Map.set_foreground_tile(2, 4, 'barrel')
-        self.Map.set_foreground_tile(3, 4, 'rock')
-        self.Map.set_foreground_tile(4, 4, 'barrel')
-        self.Map.set_foreground_tile(5, 4, 'rock')
-        self.Map.set_foreground_tile(6, 4, 'barrel')
-        self.Map.set_foreground_tile(7, 4, 'rock')
-        self.Map.set_foreground_tile(8, 4, 'barrel')
-        self.Map.set_foreground_tile(9, 4, 'rock')
-
-
-        # Initialize players data.
-
-        self.players = {}
-
-        for i in range(players):
-            id = str(i + 1) + 'P'
-
-            match i:
-                case 0:
-                    self.players[id] = Player(self.Map, self.Bombs, id, 32, 32)
-                case 1:
-                    self.players[id] = Player(self.Map, self.Bombs, id, (self.Map.width * 64) - 32, 32)
-                case 2:
-                    self.players[id] = Player(self.Map, self.Bombs, id, 32, (self.Map.height * 64) - 32)
-                case 3:
-                    self.players[id] = Player(self.Map, self.Bombs, id, (self.Map.width * 64) - 32, (self.Map.height * 64) - 32)
-
-
-        self.scene = Scene(width, height, '#211711') 
-
-    # Get Scene Init Data
+    # Initialize The Scene
     def get_scene_init_data(self):
+        assets = []
+
+        self.Map.add_assets(assets)
+        self.Players.add_assets(assets)
+        self.Bombs.add_assets(assets)
+
         scene_init_data = {
             "scene": self.scene.__dict__,
-            "assets": [
-                create_asset_init_data('ground_light', 64, 64, IMAGE_GROUND_LIGHT_PATH, IMAGE_GROUND_LIGHT_URL),
-                create_asset_init_data('ground_dark', 64, 64, IMAGE_GROUND_DARK_PATH, IMAGE_GROUND_DARK_URL),
 
-                create_asset_init_data('barrel', 64, 64, IMAGE_BARREL_PATH, IMAGE_BARREL_URL),
-                create_asset_init_data('rock', 64, 64, IMAGE_ROCK_PATH, IMAGE_ROCK_URL),
-
-                create_asset_init_data('player', 64, 64, IMAGE_PLAYER_PATH, IMAGE_PLAYER_URL),
-                create_asset_init_data('bomb', 64, 64, IMAGE_BOMB_PATH, IMAGE_BOMB_URL),
-                create_asset_init_data('bomb_flash', 64, 64, IMAGE_BOMB_FLASH_PATH, IMAGE_BOMB_FLASH_URL),
-                create_asset_init_data('bomb_icon', 64, 64, IMAGE_BOMB_ICON_PATH, IMAGE_BOMB_ICON_URL),
-                create_asset_init_data('explosion_range', 128, 128, IMAGE_EXPLOSION_RANGE_PATH, IMAGE_EXPLOSION_RANGE_URL),
-                create_asset_init_data('explosion_1', 64, 64, IMAGE_EXPLOSION_1_PATH, IMAGE_EXPLOSION_1_URL),
-                create_asset_init_data('explosion_2', 64, 64, IMAGE_EXPLOSION_2_PATH, IMAGE_EXPLOSION_2_URL),
-                create_asset_init_data('explosion_3', 64, 64, IMAGE_EXPLOSION_3_PATH, IMAGE_EXPLOSION_3_URL),
-                create_asset_init_data('explosion_4', 64, 64, IMAGE_EXPLOSION_4_PATH, IMAGE_EXPLOSION_4_URL),
-                create_asset_init_data('explosion_5', 64, 64, IMAGE_EXPLOSION_5_PATH, IMAGE_EXPLOSION_5_URL),
-                create_asset_init_data('explosion_6', 64, 64, IMAGE_EXPLOSION_6_PATH, IMAGE_EXPLOSION_6_URL),
-                create_asset_init_data('explosion_7', 64, 64, IMAGE_EXPLOSION_7_PATH, IMAGE_EXPLOSION_7_URL)
-            ],
-            "background": [
-                # create_image_view_data("bg", 0, 0, 1000, 500),
-            ]
+            "assets": assets,
+            "background": []
         }
 
         return scene_init_data
-
-    # Update The Game
-    def update(self, players):
-        self.frame_count += 1
-
-        # update game by these commands
-        #ai_1p_cmd = commands[self.ai_clients()[0]["name"]]
-        #command = (PlatformAction(ai_1p_cmd)
-        #           if ai_1p_cmd in PlatformAction.__members__ else PlatformAction.NONE)
-
-        self.Map.update()
-
-        exploded_bombs = self.Bombs.update()
-
-        for exploded_bomb in exploded_bombs:
-            self.players[exploded_bomb["owner"]].bombs += 1
-
-            self.Map.bomb_exploded(exploded_bomb["x"], exploded_bomb["y"])
-
-            score_increase = 0
-
-            for _, player in self.players.items():
-                if player.bomb_exploded(exploded_bomb["owner"], exploded_bomb["x"], exploded_bomb["y"]):
-                    score_increase += 2
-            
-            self.players[exploded_bomb["owner"]].score += score_increase
-
-        for id, commands in players.items():
-            if (commands != None):
-                for id in self.players:
-                    self.players[id].calculate_player_size()
-
-                self.players[id].update()
-
-                x = 0
-                y = 0
-
-                if 'move_left' in commands:
-                    x = -PLAYER_SPEED
-                elif 'move_right' in commands:
-                    x = PLAYER_SPEED
-    
-                if 'move_up' in commands:
-                    y = -PLAYER_SPEED
-                elif 'move_down' in commands:
-                    y = PLAYER_SPEED
-
-                self.players[id].move(x, y)
-
-                if 'place_bomb' in commands:
-                    self.players[id].place_bomb()
-
-        if not self.is_running:
-            return "RESET"
-
-    # Get The Data For The Players
-    def get_data_from_game_to_player(self):
-        to_players_data = {}
-
-        for ai_client in self.ai_clients():
-            player = self.players[ai_client["name"]]
-
-            to_players_data[ai_client["name"]] = {
-                "status": GameStatus.GAME_ALIVE,
-                "frame": self.frame_count,
-
-                "score": player.score,
-
-                "x": player.x,
-                "y": player.yㄊ
-            }
-
-        return to_players_data
-
-    # Get The Game Status
-    def get_game_status(self):
-        # TODO return game status
-
-        return GameStatus.GAME_ALIVE
-
-    # Reset The Game
-    def reset(self):
-        # TODO reset the game
-
-        pass
-
-    @property
-    def is_running(self):
-        return self.get_game_status() == GameStatus.GAME_ALIVE
-
-    @check_game_progress
-    def get_scene_progress_data(self) -> dict:
-        players = []
-
-        for _, player in self.players.items():
-            players.append(player)
-
-        return {
-            "frame": self.frame_count,
-
-            "background": [],
-            "foreground": [],
-
-            "object_list": render(self.width, self.height, self.Map, self.Bombs, players),
-            "toggle_with_bias": [],
-            "toggle": [],
-
-            "user_info": [],
-            "game_sys_info": {}
-        }
-
-    @check_game_result
-    def get_game_result(self):
-        #if self._game_status == GameStatus.GAME_PASS:
-        #    self.game_result_state = GameResultState.PASSED
-
-        return {
-            "frame_used": self.frame_count,
-            "status": self.game_result_state,
-            "attachment": [
-                {
-                    "player_num": self.ai_clients()[0]['name'],
-                    "rank": 1,
-                    # TODO add other information
-
-                }
-            ]
-
-        }
-
-    def get_keyboard_command(self):
-        cmd_1p = "NONE"
-
-        key_pressed_list = pygame.key.get_pressed()
-        if key_pressed_list[pygame.K_a]:
-            cmd_1p = "SERVE_TO_LEFT"
-        elif key_pressed_list[pygame.K_d]:
-            cmd_1p = "SERVE_TO_RIGHT"
-        elif key_pressed_list[pygame.K_LEFT]:
-            cmd_1p = "MOVE_LEFT"
-        elif key_pressed_list[pygame.K_RIGHT]:
-            cmd_1p = "MOVE_RIGHT"
-        else:
-            cmd_1p = "NONE"
-
-        ai_1p = self.ai_clients()[0]["name"]
-        
-        return {ai_1p: cmd_1p}
 
     @staticmethod
     def ai_clients():
@@ -260,3 +51,89 @@ class Bomb(PaiaGame):
             { "name": "1P" },
             { "name": "2P" }
         ]
+
+    # Update The Game
+    def update(self, commands):
+        foreground_tiles = self.Map.get_foreground_tiles_with_position()
+
+        self.Map.update()
+        self.Players.update(commands, foreground_tiles)
+        self.Bombs.update(commands)
+
+        return
+
+    # Get The Data For The Players
+    def get_data_from_game_to_player(self):
+        to_players_data = {}
+
+        for name, data in self.Players.players_data.items():
+            to_players_data[name] = {
+                "status": GameStatus.GAME_ALIVE,
+                "frame": self.frame_count,
+
+                "team": data["team"],
+
+                "score": data["score"],
+                "bombs": data["bombs"],
+
+                "x": data["x"],
+                "y": data["y"]
+            }
+
+        return to_players_data
+
+    # Get The Scene Progress Data (Render)
+    def get_scene_progress_data(self):
+        objects_info = []
+
+        self.Map.render(objects_info)
+        self.Players.render(self.width, self.height, objects_info, self.Map.render_offset_x, self.Map.render_offset_y, self.Map.tile_size)
+        self.Bombs.render(objects_info, self.Map.render_offset_x, self.Map.render_offset_y, self.Map.tile_size)
+
+        objects_info.sort(key = sort_objects)
+
+        sorted_objects = []
+
+        for object_info in objects_info:
+            sorted_objects.append(object_info["object"])
+
+        return {
+            "frame": self.frame_count,
+
+            "background": [],
+            "foreground": [],
+
+            "object_list": sorted_objects,
+            "toggle_with_bias": [],
+            "toggle": [],
+
+            "user_info": [],
+            "game_sys_info": {}
+        }
+
+    # Get The Game Status
+    def get_game_status(self):
+        # TODO return game status
+
+        return GameStatus.GAME_ALIVE
+
+    # Get The Game Result
+    def get_game_result(self):
+        return {
+            "frame_used": self.frame_count,
+            "status": self.game_result_state,
+            "attachment": [
+                {
+                    "player_num": "1P"
+                }
+            ]
+
+        }
+
+    # Reset The Game
+    def reset(self):
+        return
+
+# Sort Objects
+def sort_objects (item: dict):
+    return item["layer"]

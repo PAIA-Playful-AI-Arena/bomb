@@ -3,10 +3,10 @@ import sys
 
 sys.path.append(path.dirname(__file__))
 
-from src.game import Bomb
+from src.game import Game
 
 GAME_SETUP = {
-    "game": Bomb
+    "game": Game
 }
 
-# python3 -m mlgame -i ./ml/ml_play_manual.py .
+# python3 -m mlgame -i ./ml/ml_play_manual.py -i ./ml/ml_play_manual2.py -i ./ml/ml_play_manual3.py . --team_mode "on"

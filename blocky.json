@@ -1,24 +1,32 @@
 {
     "INIT_INFO": [
-        ["ai_name", "name of ai", "AI編號"]
+        ["ai_name", "name of ai", "AI 編號"]
     ],
+
     "GAME_STATUS": [
         ["GAME_ALIVE", "alive", "存活"],
         ["GAME_PASS", "pass", "通關"],
         ["GAME_OVER", "over", "失敗"]
     ],
+
     "SCENE_INFO": [
         ["scene_info['status']", "game status", "遊戲狀態"],
         ["scene_info['frame']", "# frame", "# 幀數"],
+
+        ["scene_info['team']", "player team", "玩家團隊"],
+
         ["scene_info['score']", "player score", "玩家分數"],
+        ["scene_info['bombs']", "player bombs", "玩家炸彈數"],
+
         ["scene_info['x']", "player x", "玩家 X 座標"],
-        ["scene_info['y']", "player y", "玩家 Y 座標"]
-        
+        ["scene_info['y']", "player y", "玩家 Y 座標"]        
     ],
+
     "CONSTANT": [
         [64, "tile width", "瓦塊寬度"],
         [64, "tile height", "瓦塊高度"]
     ],
+
     "ACTION": [
         ["move_left", "moving left", "向左移動"],
         ["move_right", "moving right", "向右移動"],

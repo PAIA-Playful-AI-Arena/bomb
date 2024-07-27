@@ -1,0 +1,15 @@
+[Rules]
+| player_speed: number(5)
+| player_bombs: number(2)
+|
+| bomb_countdown: number(150)
+| bomb_explode_range: number(125)
+
+[Map]
+| width: number(10)
+| height: number(5)
+|
+| tiles_type: string_list(string(barrel))
+| tiles_position: vec2_list(vec2(1:1))
+|
+| player_spawns: vec2_list(vec2(0:0), vec2(0:1), vec2(0:2), vec2(0:3))

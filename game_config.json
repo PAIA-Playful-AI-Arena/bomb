@@ -1,50 +1,57 @@
 {
-  "game_name": "game",
+  "game_name": "bomb",
   "version": "0.0.1",
   "url": "https://github.com/PAIA-Playful-AI-Arena/bomb",
-  "description": "",
+
+  "description": "爆炸吧！訓練你的 AI 來控制角色的移動，放置與躲避炸彈，成為最會炸的炸彈人吧！",
   "logo": [
-    "./asset/icon.png",
-    "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/main/asset/icon.png"
+    "./asset/images/icon.png",
+    "https://raw.githubusercontent.com/PAIA-Playful-AI-Arena/bomb/main/asset/images/icon.png"
   ],
+
   "user_num": {
     "min": 1,
-    "max": 1
+    "max": 4
   },
+
   "game_params": [
     {
-      "name": "level",
-      "flag": "l",
-      "verbose": "關卡",
-      "type": "int",
-      "min": 1,
-      "max": 100,
-      "help": "Specify the level map",
-      "default": 1
-    },
-    {
-      "name": "difficulty",
-      "flag": "d",
-      "verbose": "遊戲模式",
+      "name": "level_name",
+      "verbose": "關卡名稱",
+
       "type": "str",
-      "choices": [
-        {
-          "verbose": "一般",
-          "value": "NORMAL"
-        },
-        {
-          "verbose": "困難",
-          "value": "HARD"
-        }
-      ],
-      "help": "Specify the game style. Choices: %(choices)s",
-      "default": "NORMAL"
+      "default": "basic",
+
+      "help": "The name of the level."
     },
     {
       "name": "level_file",
       "verbose": "關卡檔案",
+
       "type": "path",
-      "help": "Specify the level file, this config will ignore any number you set in `level` "
+
+      "help": "The path of the level file."
+    },
+    {
+      "name": "game_duration",
+      "verbose": "遊戲時長 (幀數)",
+
+      "type": "int",
+      "default": 1800,
+      "min": 30,
+      "max": 18000,
+
+      "help": "The duration of the game."
+    },
+    {
+      "name": "team_mode",
+      "verbose": "隊伍模式",
+
+      "type": "str",
+      "default": "off",
+      "choices": ["off", "on"],
+
+      "help": "Whether to split the players into teams."
     }
   ]
 }

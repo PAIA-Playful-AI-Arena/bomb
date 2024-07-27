@@ -1,67 +1,61 @@
-# Bomb 炸彈人
+# 💣 炸彈人
+爆炸吧！訓練你的 AI 來控制角色的移動，放置與躲避炸彈，成為最會炸的炸彈人吧！
 
-控制遊戲角色，放置炸彈，小心不要被炸傷囉。
+## 玩法介紹
+玩家需要在特定的時間內使用炸彈攻擊敵對玩家，獲得境可能多的分數。炸彈不會影響友方團隊的其他玩家，且當多個炸彈在彼此的爆炸範圍內就會產生 `連鎖爆炸`。另外地圖上的 `瓦磚 (Tile)` 會阻擋玩家的移動，玩家可以破壞地圖上 `可破壞的瓦磚 (Tile)` 來讓自己更好移動。
 
-# 遊戲說明
+> 手動操作：
+> * `w` `s` `a` `d` 移動角色。 
+> * `z` 放置炸彈。
 
-`遊戲目標` &nbsp;&nbsp;&nbsp;炸倒對手
+## 計分機制
+* `炸到敵對玩家` + 2
+* `被炸到` - 1
 
-`失敗條件` &nbsp;&nbsp;&nbsp;生命值歸零
+# 遊戲設定
+你可以簡單的設置遊戲的參數，另外我們也提供了一個人類可讀的關卡檔案格式 (與編輯器)，讓你可以輕鬆的打照你心中的完美關卡！
 
-# 遊戲規則(可以討論，考量以下：遊戲的難易度、時間長短、公平性、可看度、)
-1. 每個人同時可以放兩顆炸彈，需等到炸彈爆炸後，才可以放第二顆。
-2. 每個玩家獨自一隊，最多可以給四個人同時遊玩。（若要分隊，請用一個AI同時控制兩隻角色的方式）
-3. 被炸到將於重生點復活，分數減1；自己的炸彈炸死一個人，分數加2。
-4. 時間到，結算分數，分數高者獲勝，分數相同則平手。
-5. 每顆炸彈爆炸範圍是中心點外 `20px`，兩顆炸彈在彼此的爆炸範圍內，其中一顆爆炸會讓另一顆在 `5frame` 後爆炸。
-6. 道具？
+## 遊戲參數
+```py
+Game(level_name: str, level_file: Union[None, str], width: int = 750, height: int = 500, user_num: int = 1, game_duration: int = 1800, team_mode: str = "off")
+```
+* `level_name: str` 關卡名稱 (遊戲預設的關卡名稱)。
+* `level_file: str` 關卡檔案路徑，設置此參數會覆蓋掉 "level_name"。
+* `width: int` 視窗的寬度。 
+* `height: int` 視窗的高度。
+* `user_num: int` 玩家的數量。
+  * 範圍為 1 ~ 關卡支援的最大玩家數 (最大為 4)。
+* `game_duration: int` 遊戲的時長 (幀數)。
+* `team_mode: bool` 團隊模式。
+  * 只在玩家數量為 2 個以上時才有用，在 3 個玩家時會有一對只有一個玩家。
 
-<br />
+## 關卡參數
+我們有自己的關卡檔案格式，以下為一個簡單的範例：
+```
+[Rules]
+| player_speed: number(5)
+| player_bombs: number(2)
+|
+| bomb_countdown: number(150)
+| bomb_explode_range: number(125)
 
-# AI 的行動
-
-<br />
-
-![W-key](/assets/icons/w.svg)&nbsp;&nbsp;&nbsp;往上移動。
-![A-key](/assets/icons/a.svg)&nbsp;&nbsp;&nbsp;往左移動。
-![S-key](/assets/icons/s.svg)&nbsp;&nbsp;&nbsp;往下移動。
-![D-key](/assets/icons/d.svg)&nbsp;&nbsp;&nbsp;往右移動。
-![Z-key](/assets/icons/z.svg)&nbsp;&nbsp;&nbsp;放置炸彈。
-
-
-<br />
-
-
-# 座標系統
-<!-- 要給玩家的資訊 -->
-左上角為(0,0)，提供給玩家的都是物件的中心座標。
-# 遊戲物件
-
-<br />
-
-## 遊戲角色
-每個AI會控制一隻貓頭鷹。
-
-## 炸彈
-150 frame 後會爆炸。
-
-## 牆壁
-不可以被破壞
-
-## 障礙物
-可以被炸彈破壞
-
-
-# 自訂關卡地圖
-
-<br />
-
-除了 PAIA 提供的關卡，你也可以嘗試自行設計關卡，讓磚塊出現在不同位置來營造更多遊戲樂趣，也可以使用[地圖編輯器](./asset/tool/arkanoid_map_editor.exe)自行編輯地圖。
-
-# 適用賽制
-- `淘汰賽`
-
-# 其他需求
-1. 可以使用 Tilemap 來設計地圖
-2. 角色移動是連續性的，不是一格一格移動。
-3. 炸彈放置的位置也是連續性的，不是只能放在格子正中央。
+[Map]
+| width: number(10)
+| height: number(5)
+|
+| tiles_type: string_list(string(barrel))
+| tiles_position: vec2_list(vec2(1:1))
+|
+| player_spawns: vec2_list(vec2(0:0), vec2(0:1), vec2(0:2), vec2(0:3))
+```
+* `Rules` 關卡規則。
+  * `player_speed: number` 玩家的移動速度。
+  * `player_bombs: number` 玩家的炸彈數。
+  * `bomb_countdown: number` 炸彈的爆炸倒數計時時間 (幀數)。
+  * `bomb_explode_range: number` 炸彈的爆炸範圍。
+* `Map` 關卡的地圖
+  * `width: number` 關卡的寬度 (幾個瓦磚)。
+  * `height: number` 關卡的高度 (幾個瓦磚)。
+  * `tiles_type: string_list` | 地圖上每個瓦磚的名稱，對照到 "tiles_position"。
+  * `tiles_position: vec2_list` | 地圖上每個瓦磚的位置，對照到 "tiles_type"。
+  * `player_spawns: vec2_list` | 玩家的重生點，清單的長度決定了最大的玩家數量。
