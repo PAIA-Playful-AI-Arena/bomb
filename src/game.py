@@ -1,9 +1,10 @@
 from mlgame.game.paia_game import PaiaGame, GameStatus, Scene
 from typing import Union
-from os import path, stat
+from os import path
 
 from .objects.players import Players
 from .objects.bombs import Bombs
+from .objects.time import Time
 from .objects.map import Map 
 from .level import Level
 
@@ -20,7 +21,8 @@ class Game(PaiaGame):
  
         self.width = width
         self.height = height
-        
+
+        self.Time = Time()
         self.Map = Map(self.Level, width, height)
         self.Players = Players(self.Level, user_num, team_mode == "on")
         self.Bombs = Bombs(self.Level, self.Map, self.Players)
@@ -93,6 +95,7 @@ class Game(PaiaGame):
     def get_scene_progress_data(self):
         objects_info = []
 
+        self.Time.render(self.width, self.height, objects_info, self.game_duration, self.frame_count)
         self.Map.render(objects_info)
         self.Players.render(self.width, self.height, objects_info, self.Map.render_offset_x, self.Map.render_offset_y, self.Map.tile_size)
         self.Bombs.render(objects_info, self.Map.render_offset_x, self.Map.render_offset_y, self.Map.tile_size)

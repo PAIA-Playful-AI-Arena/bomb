@@ -6,7 +6,7 @@ from ..loader import create_image_asset
 from ..level import Level
 from .map import Map
 
-# Players
+# The Players Object
 class Players:
     TEAM_COLORS = ["#3996E8", "#E93850", "#E9D738", "#38E849"]
     TEAM_BOMB_ICONS = ["bomb_icon_blue", "bomb_icon_red", "bomb_icon_yellow", "bomb_icon_green"]
@@ -14,7 +14,7 @@ class Players:
     PLAYER_HITBOX_WIDTH = 50
     PLAYER_HITBOX_HEIGHT = 60
 
-    # Initialize The Players
+    # Initialize The Object
     def __init__(self, level: Level, player_amount: int, team_mode: bool):
         if player_amount > len(level.Map["player_spawns"]):
             raise Exception(f"Player Amount Out Of Bounds: {player_amount} (Max {len(level.Map["player_spawns"])})")

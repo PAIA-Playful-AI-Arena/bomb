@@ -7,9 +7,9 @@ from .players import Players
 from ..level import Level
 from .map import Map
 
-# Bombs
+# The Bombs Object
 class Bombs:
-    # Initialize The Class
+    # Initialize The Object
     def __init__(self, level: Level, map: Map, players: Players):
         self.Level = level
         self.Map = map

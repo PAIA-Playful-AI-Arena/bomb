@@ -5,7 +5,7 @@ import math
 from ..loader import create_image_asset
 from ..level import Level
 
-# Map
+# The Map Object
 class Map:
     TILE_TYPES = {
         "empty": { "image": None, "destroyable": False },
@@ -17,7 +17,7 @@ class Map:
         "rock": { "image": "rock", "destroyable": False }
     }
 
-    # Initialize The Map
+    # Initialize The Object
     def __init__(self, level: Level, width: int, height: int):
         if not len(level.Map["tiles_type"]) == len(level.Map["tiles_position"]):
             raise Exception(f"Tiles Type And Position Are Not The Same Length: {len(level.Map["tiles_type"])} != {len(level.Map["tiles_position"])}")
