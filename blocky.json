@@ -13,13 +13,14 @@
         ["scene_info['status']", "game status", "遊戲狀態"],
         ["scene_info['frame']", "# frame", "# 幀數"],
 
-        ["scene_info['team']", "player team", "玩家團隊"],
-
+        ["scene_info['team']", "player team", "玩家所屬團隊"],
         ["scene_info['score']", "player score", "玩家分數"],
         ["scene_info['bombs']", "player bombs", "玩家炸彈數"],
 
         ["scene_info['x']", "player x", "玩家 X 座標"],
-        ["scene_info['y']", "player y", "玩家 Y 座標"]        
+        ["scene_info['y']", "player y", "玩家 Y 座標"],
+
+        ["scene_info['bombs_matrix']", "bombs matrix", "敵對炸彈的矩陣資料"]
     ],
 
     "CONSTANT": [

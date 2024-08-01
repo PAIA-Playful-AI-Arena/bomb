@@ -43,10 +43,10 @@ Game(level_name: str, level_file: Union[None, str], width: int = 750, height: in
 | width: number(10)
 | height: number(5)
 |
-| tiles_type: string_list(string(barrel))
-| tiles_position: vec2_list(vec2(1:1))
+| tiles_type: string_list(string(barrel), string(rock), string(rock), string(barrel))
+| tiles_position: vec2_list(vec2(1:1), vec2(2:1), vec2(1:2), vec2(2:2))
 |
-| player_spawns: vec2_list(vec2(0:0), vec2(0:1), vec2(0:2), vec2(0:3))
+| player_spawns: vec2_list(vec2(0:0), vec2(9:0), vec2(0:4), vec2(9:4))
 ```
 * `Rules` 關卡規則。
   * `player_speed: number` 玩家的移動速度。

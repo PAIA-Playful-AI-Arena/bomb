@@ -69,6 +69,21 @@ class Bombs:
 
         return
 
+    # Get Matrix
+    def get_matrix(self, team_id: int):
+        matrix = []
+
+        for _ in range(self.Level.Map["width"] * self.Level.Map["height"]):
+            matrix.append(0)
+
+        for bomb_data in self.bombs_data:
+            if self.Players.players_data[bomb_data["owner"]]["team"] != team_id:
+                index = round(bomb_data["x"] / 64) + (round(bomb_data["y"] / 64) * self.Level.Map["width"])
+
+                matrix[index] = matrix[index] + 1
+
+        return matrix
+
     # Upate The Bombs
     def update(self, commands: dict):
         for player_name, actions in commands.items():

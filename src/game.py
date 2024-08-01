@@ -52,13 +52,12 @@ class Game(PaiaGame):
     def update(self, commands):
         foreground_tiles = self.Map.get_foreground_tiles_with_position()
 
-        self.Map.update()
-        self.Players.update(commands, foreground_tiles)
-        self.Bombs.update(commands)
+        if self.frame_count < self.game_duration:
+            self.Map.update()
+            self.Players.update(commands, foreground_tiles)
+            self.Bombs.update(commands)
 
-        self.frame_count += 1
-
-        return
+            self.frame_count += 1
 
     # Get The Data For The Players
     def get_data_from_game_to_player(self):
@@ -75,17 +74,20 @@ class Game(PaiaGame):
                 else:
                     status = GameStatus.GAME_OVER
 
+            print(self.Bombs.get_matrix(player_data["team"]))
+
             to_players_data[player_name] = {
                 "status": status,
                 "frame": self.frame_count,
 
                 "team": player_data["team"],
-
                 "score": player_data["score"],
                 "bombs": player_data["bombs"],
 
                 "x": player_data["x"],
-                "y": player_data["y"]
+                "y": player_data["y"],
+
+                "bombs_matrix": self.Bombs.get_matrix(player_data["team"])
             }
 
         return to_players_data
