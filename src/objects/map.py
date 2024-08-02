@@ -87,6 +87,22 @@ class Map:
 
         return self.foreground_tiles[x + (y * self.width)]
 
+    # Get Matrix
+    def get_matrix(self):
+        matrix = []
+
+        for index in range(len(self.background_tiles)):
+            if self.foreground_tiles[index] == None:
+                matrix.append(0)
+            else:
+                if self.TILE_TYPES[self.foreground_tiles[index]]["destroyable"]:
+                    matrix.append(1)
+                else:
+                    matrix.append(2)
+
+        return matrix
+
+
     # Set A Foreground Tile
     def set_foreground_tile(self, tile_type: str, x: int, y: int):
         if tile_type not in self.TILE_TYPES:

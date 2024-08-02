@@ -151,6 +151,21 @@ class Players:
 
         return positions
 
+    # Get Matrix
+    def get_matrix(self, team_id: int):
+        matrix = []
+
+        for _ in range(self.Level.Map["width"] * self.Level.Map["height"]):
+            matrix.append(0)
+
+        for _, player_data in self.players_data.items():
+            if player_data["team"] != team_id:
+                index = round(player_data["x"] / 64) + (round(player_data["y"] / 64) * self.Level.Map["width"])
+
+                matrix[index] = matrix[index] + 1
+
+        return matrix
+
     # Bomb Exploded
     def bomb_exploded(self, owner: str, x: int, y: int):
         if owner not in self.players_data:

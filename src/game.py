@@ -65,6 +65,8 @@ class Game(PaiaGame):
 
         winning_team = self.Players.get_winning_team()
 
+        tiles_matrix = self.Map.get_matrix()
+
         for player_name, player_data in self.Players.players_data.items():
             status = GameStatus.GAME_ALIVE
 
@@ -73,8 +75,6 @@ class Game(PaiaGame):
                     status = GameStatus.GAME_PASS
                 else:
                     status = GameStatus.GAME_OVER
-
-            print(self.Bombs.get_matrix(player_data["team"]))
 
             to_players_data[player_name] = {
                 "status": status,
@@ -87,6 +87,8 @@ class Game(PaiaGame):
                 "x": player_data["x"],
                 "y": player_data["y"],
 
+                "tiles_matrix": tiles_matrix,
+                "players_matrix": self.Players.get_matrix(player_data["team"]),
                 "bombs_matrix": self.Bombs.get_matrix(player_data["team"])
             }
 
