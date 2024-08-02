@@ -9,4 +9,4 @@ GAME_SETUP = {
     "game": Game
 }
 
-# python3 -m mlgame -i ./ml/ml_play_manual.py -i ./ml/ml_play_manual2.py .
+# python3 -m mlgame -i ./ml/ml_play_manual.py .

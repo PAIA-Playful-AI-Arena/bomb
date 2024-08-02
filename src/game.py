@@ -101,7 +101,7 @@ class Game(PaiaGame):
 
         self.Time.render(self.width, self.height, objects_info, self.game_duration, self.frame_count)
         self.Map.render(objects_info)
-        self.Players.render(self.width, self.height, objects_info, self.Map.render_offset_x, self.Map.render_offset_y, self.Map.tile_size)
+        # self.Players.render(self.width, self.height, objects_info, self.Map.render_offset_x, self.Map.render_offset_y, self.Map.tile_size)
         self.Bombs.render(objects_info, self.Map.render_offset_x, self.Map.render_offset_y, self.Map.tile_size)
 
         objects_info.sort(key = sort_objects)

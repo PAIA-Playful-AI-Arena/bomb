@@ -59,3 +59,28 @@ Game(level_name: str, level_file: Union[None, str], width: int = 750, height: in
   * `tiles_type: string_list` | 地圖上每個瓦磚的名稱，對照到 "tiles_position"。
   * `tiles_position: vec2_list` | 地圖上每個瓦磚的位置，對照到 "tiles_type"。
   * `player_spawns: vec2_list` | 玩家的重生點，清單的長度決定了最大的玩家數量。
+
+# 遊戲資料
+遊戲提供給玩家一些如地圖瓦磚資訊、玩家位置、炸彈位置等資料，你需要用這些資料來訓練你的 AI。
+* `status: str` 遊戲的狀態。
+  * 可為：`GAME_ALIVE` `GAME_PASS` `GAME_OVER`。
+* `frame: int` 當前幀數。
+* `team: int` 玩家所屬團隊。
+* `score: int` 玩家的分數
+* `bombs: int` 玩家剩餘炸彈數。
+* `x: int` 玩家的 X 座標。
+* `y: int` 玩家的 Y 座標。
+* `tiles_matrix: list` 瓦磚的矩陣資料。
+* `players_matrix: list` 敵對玩家的矩陣資料。
+* `bombs_matrix: list` 敵對玩家的炸彈資料。
+
+## 座標系統
+遊戲內有兩種座標系統，`實際座標` 與 `顯示座標`。`實際座標` 為遊戲世界中實際的座標，`顯示座標` 則為顯示到螢幕上的座標，在這裡我們指的的座標都為 `實際座標`。
+![coordinate system](./assets/coordinate.png)
+
+## 瓦磚矩陣資料
+瓦磚的矩陣資料為一個清單，長度為 `地圖寬度` x `地圖高度`。該清單中可以有三個值，分別為：
+* `0` 沒有瓦磚。
+* `1` 有可破壞的瓦磚。
+* `2` 有不可破壞的瓦磚。
+![tiles matrix data](./assets/tiles_matrix.png)
