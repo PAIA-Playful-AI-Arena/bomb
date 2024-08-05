@@ -61,7 +61,7 @@ Game(level_name: str, level_file: Union[None, str], width: int = 750, height: in
   * `player_spawns: vec2_list` | 玩家的重生點，清單的長度決定了最大的玩家數量。
 
 # 遊戲資料
-遊戲提供給玩家一些如地圖瓦磚資訊、玩家位置、炸彈位置等資料，你需要用這些資料來訓練你的 AI。
+遊戲提供給玩家一些如地圖瓦磚資訊、玩家位置、炸彈位置等資料，你可以用這些資料來訓練你的 AI。
 * `status: str` 遊戲的狀態。
   * 可為：`GAME_ALIVE` `GAME_PASS` `GAME_OVER`。
 * `frame: int` 當前幀數。
@@ -76,11 +76,18 @@ Game(level_name: str, level_file: Union[None, str], width: int = 750, height: in
 
 ## 座標系統
 遊戲內有兩種座標系統，`實際座標` 與 `顯示座標`。`實際座標` 為遊戲世界中實際的座標，`顯示座標` 則為顯示到螢幕上的座標，在這裡我們指的的座標都為 `實際座標`。
-![coordinate system](./assets/coordinate.png)
+![coordinate system](./assets/images/coordinate.png)
 
 ## 瓦磚矩陣資料
 瓦磚的矩陣資料為一個清單，長度為 `地圖寬度` x `地圖高度`。該清單中可以有三個值，分別為：
 * `0` 沒有瓦磚。
 * `1` 有可破壞的瓦磚。
 * `2` 有不可破壞的瓦磚。
-![tiles matrix data](./assets/tiles_matrix.png)
+![tiles matrix data](./assets/images/tiles_matrix.png)
+
+## 玩家矩陣資料
+玩家的矩陣資料與[瓦磚矩陣資料](#瓦磚矩陣資料)類似，只是清單中的值由在該位置的敵對玩家數所決定：
+![players matrix data](./assets/images/players_matrix.png)
+
+## 炸彈矩陣資料
+炸彈的矩陣資料與[玩家矩陣資料](#玩家矩陣資料)相同，只是清單中的直由在該位置的敵對玩家炸彈數所決定。
