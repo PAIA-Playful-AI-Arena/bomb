@@ -15,7 +15,7 @@ class Game(PaiaGame):
         super().__init__(user_num = user_num)
 
         if level_file == None:
-            level_file = path.join(path.dirname(__file__), "levels/" + level_name + ".bomb")
+            level_file = path.join(path.dirname(__file__), "levels/" + level_name + ".json")
 
         self.Level = Level(level_file)
  

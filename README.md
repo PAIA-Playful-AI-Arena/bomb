@@ -30,35 +30,36 @@ Game(level_name: str, level_file: Union[None, str], width: int = 750, height: in
   * 只在玩家數量為 2 個以上時才有用，在 3 個玩家時會有一對只有一個玩家。
 
 ## 關卡參數
-我們有自己的關卡檔案格式 (.bomb)，以下為一個簡單的範例：
-```
-[Rules]
-| player_speed: number(5)
-| player_bombs: number(2)
-|
-| bomb_countdown: number(150)
-| bomb_explode_range: number(125)
+我們使用 JSON 來作為關卡的檔案格式，以下為一個簡單的範例：
+```json
+{
+  "rules": {
+    "player_speed": 5,
+    "player_bombs": 2,
 
-[Map]
-| width: number(10)
-| height: number(5)
-|
-| tiles_type: string_list(string(barrel), string(rock), string(rock), string(barrel))
-| tiles_position: vec2_list(vec2(1:1), vec2(2:1), vec2(1:2), vec2(2:2))
-|
-| player_spawns: vec2_list(vec2(0:0), vec2(9:0), vec2(0:4), vec2(9:4))
+    "bomb_countdown": 150,
+    "bomb_explode_range": 125
+  },
+
+  "map": {
+    "width": 10,
+    "height": 5,
+
+    "tiles": [{ "type": "barrel", "x": 1, "y": 1 }],
+    "spawns": [{ "x": 0, "y": 0 }]
+  }
+}
 ```
 * `Rules` 關卡規則。
   * `player_speed: number` 玩家的移動速度。
   * `player_bombs: number` 玩家的炸彈數。
-  * `bomb_countdown: number` 炸彈的爆炸倒數計時時間 (幀數)。
+  * `bomb_countdown: number` 炸彈的爆炸倒數時長 (幀數)。
   * `bomb_explode_range: number` 炸彈的爆炸範圍。
 * `Map` 關卡的地圖
   * `width: number` 關卡的寬度 (幾個瓦磚)。
   * `height: number` 關卡的高度 (幾個瓦磚)。
-  * `tiles_type: string_list` | 地圖上每個瓦磚的名稱，對照到 "tiles_position"。
-  * `tiles_position: vec2_list` | 地圖上每個瓦磚的位置，對照到 "tiles_type"。
-  * `player_spawns: vec2_list` | 玩家的重生點，清單的長度決定了最大的玩家數量。
+  * `tiles: list` | 地圖上的瓦磚。
+  * `spawns: list` | 玩家的重生點，清單的長度決定了最大的玩家數量。
 
 # 遊戲資料
 遊戲提供給玩家一些如地圖瓦磚資訊、玩家位置、炸彈位置等資料，你可以用這些資料來訓練你的 AI。

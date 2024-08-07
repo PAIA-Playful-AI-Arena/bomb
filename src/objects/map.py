@@ -19,9 +19,6 @@ class Map:
 
     # Initialize The Object
     def __init__(self, level: Level, width: int, height: int):
-        if not len(level.Map["tiles_type"]) == len(level.Map["tiles_position"]):
-            raise Exception(f"Tiles Type And Position Are Not The Same Length: {len(level.Map["tiles_type"])} != {len(level.Map["tiles_position"])}")
-
         self.Level = level
 
         self.width = level.Map["width"]
@@ -39,8 +36,8 @@ class Map:
 
             self.foreground_tiles.append("empty")
 
-        for index, tile_type in enumerate(level.Map["tiles_type"]):
-            self.set_foreground_tile(tile_type, level.Map["tiles_position"][index].x, level.Map["tiles_position"][index].y)
+        for _, tile in enumerate(level.Map["tiles"]):
+            self.set_foreground_tile(tile["type"], tile["x"], tile["y"])
 
         self.resize(width, height)
 

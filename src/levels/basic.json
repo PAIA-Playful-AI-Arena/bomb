@@ -1,0 +1,17 @@
+{
+  "rules": {
+    "player_speed": 5,
+    "player_bombs": 2,
+
+    "bomb_countdown": 150,
+    "bomb_explode_range": 125
+  },
+
+  "map": {
+    "width": 10,
+    "height": 5,
+
+    "tiles": [{ "type": "barrel", "x": 1, "y": 1 }],
+    "spawns": [{ "x": 0, "y": 0 }]
+  }
+}

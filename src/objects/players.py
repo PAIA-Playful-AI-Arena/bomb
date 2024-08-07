@@ -16,8 +16,8 @@ class Players:
 
     # Initialize The Object
     def __init__(self, level: Level, player_amount: int, team_mode: bool):
-        if player_amount > len(level.Map["player_spawns"]):
-            raise Exception(f"Player Amount Out Of Bounds: {player_amount} (Max {len(level.Map["player_spawns"])})")
+        if player_amount > len(level.Map["spawns"]):
+            raise Exception(f"Player Amount Out Of Bounds: {player_amount} (Max {len(level.Map["spawns"])})")
 
         self.Level = level
 
@@ -31,8 +31,8 @@ class Players:
                 "bombs": level.Rules["player_bombs"],
                 "place_bomb_cooldown": 0,
 
-                "x": (self.Level.Map["player_spawns"][i].x * 64) + 32,
-                "y": (self.Level.Map["player_spawns"][i].y * 64) + 32,
+                "x": (self.Level.Map["spawns"][i]["x"] * 64) + 32,
+                "y": (self.Level.Map["spawns"][i]["y"] * 64) + 32,
 
                 "rotate_speed": -level.Rules["player_speed"] / 33.33333,
                 "target_angle": 0,
