@@ -1,0 +1,334 @@
+{
+  "rules": {
+    "player_speed": 5,
+    "player_bombs": 2,
+    "bomb_countdown": 150,
+    "bomb_explode_range": 125
+  },
+  "map": {
+    "width": 15,
+    "height": 8,
+    "tiles": [
+      {
+        "type": "player",
+        "x": 1,
+        "y": 1
+      },
+      {
+        "type": "player",
+        "x": 1,
+        "y": 6
+      },
+      {
+        "type": "player",
+        "x": 13,
+        "y": 6
+      },
+      {
+        "type": "player",
+        "x": 13,
+        "y": 1
+      },
+      {
+        "type": "rock",
+        "x": 7,
+        "y": 1
+      },
+      {
+        "type": "rock",
+        "x": 7,
+        "y": 2
+      },
+      {
+        "type": "rock",
+        "x": 7,
+        "y": 5
+      },
+      {
+        "type": "rock",
+        "x": 7,
+        "y": 6
+      },
+      {
+        "type": "barrel",
+        "x": 6,
+        "y": 1
+      },
+      {
+        "type": "barrel",
+        "x": 6,
+        "y": 2
+      },
+      {
+        "type": "barrel",
+        "x": 8,
+        "y": 1
+      },
+      {
+        "type": "barrel",
+        "x": 8,
+        "y": 2
+      },
+      {
+        "type": "barrel",
+        "x": 6,
+        "y": 6
+      },
+      {
+        "type": "barrel",
+        "x": 6,
+        "y": 5
+      },
+      {
+        "type": "barrel",
+        "x": 8,
+        "y": 5
+      },
+      {
+        "type": "barrel",
+        "x": 8,
+        "y": 6
+      },
+      {
+        "type": "barrel",
+        "x": 3,
+        "y": 1
+      },
+      {
+        "type": "barrel",
+        "x": 3,
+        "y": 2
+      },
+      {
+        "type": "barrel",
+        "x": 3,
+        "y": 5
+      },
+      {
+        "type": "barrel",
+        "x": 3,
+        "y": 6
+      },
+      {
+        "type": "barrel",
+        "x": 11,
+        "y": 1
+      },
+      {
+        "type": "barrel",
+        "x": 11,
+        "y": 2
+      },
+      {
+        "type": "barrel",
+        "x": 11,
+        "y": 5
+      },
+      {
+        "type": "barrel",
+        "x": 11,
+        "y": 6
+      },
+      {
+        "type": "rock",
+        "x": 3,
+        "y": 3
+      },
+      {
+        "type": "rock",
+        "x": 3,
+        "y": 4
+      },
+      {
+        "type": "rock",
+        "x": 11,
+        "y": 4
+      },
+      {
+        "type": "rock",
+        "x": 11,
+        "y": 3
+      },
+      {
+        "type": "barrel",
+        "x": 0,
+        "y": 1
+      },
+      {
+        "type": "barrel",
+        "x": 0,
+        "y": 2
+      },
+      {
+        "type": "barrel",
+        "x": 0,
+        "y": 3
+      },
+      {
+        "type": "barrel",
+        "x": 0,
+        "y": 4
+      },
+      {
+        "type": "barrel",
+        "x": 0,
+        "y": 5
+      },
+      {
+        "type": "barrel",
+        "x": 0,
+        "y": 6
+      },
+      {
+        "type": "barrel",
+        "x": 14,
+        "y": 1
+      },
+      {
+        "type": "barrel",
+        "x": 14,
+        "y": 2
+      },
+      {
+        "type": "barrel",
+        "x": 14,
+        "y": 3
+      },
+      {
+        "type": "barrel",
+        "x": 14,
+        "y": 4
+      },
+      {
+        "type": "barrel",
+        "x": 14,
+        "y": 5
+      },
+      {
+        "type": "barrel",
+        "x": 14,
+        "y": 6
+      },
+      {
+        "type": "rock",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "type": "rock",
+        "x": 0,
+        "y": 7
+      },
+      {
+        "type": "rock",
+        "x": 14,
+        "y": 7
+      },
+      {
+        "type": "rock",
+        "x": 14,
+        "y": 0
+      },
+      {
+        "type": "rock",
+        "x": 4,
+        "y": 3
+      },
+      {
+        "type": "rock",
+        "x": 4,
+        "y": 4
+      },
+      {
+        "type": "rock",
+        "x": 10,
+        "y": 3
+      },
+      {
+        "type": "rock",
+        "x": 10,
+        "y": 4
+      },
+      {
+        "type": "rock",
+        "x": 1,
+        "y": 7
+      },
+      {
+        "type": "rock",
+        "x": 2,
+        "y": 7
+      },
+      {
+        "type": "rock",
+        "x": 3,
+        "y": 7
+      },
+      {
+        "type": "rock",
+        "x": 4,
+        "y": 7
+      },
+      {
+        "type": "rock",
+        "x": 13,
+        "y": 7
+      },
+      {
+        "type": "rock",
+        "x": 12,
+        "y": 7
+      },
+      {
+        "type": "rock",
+        "x": 11,
+        "y": 7
+      },
+      {
+        "type": "rock",
+        "x": 10,
+        "y": 7
+      },
+      {
+        "type": "rock",
+        "x": 1,
+        "y": 0
+      },
+      {
+        "type": "rock",
+        "x": 2,
+        "y": 0
+      },
+      {
+        "type": "rock",
+        "x": 3,
+        "y": 0
+      },
+      {
+        "type": "rock",
+        "x": 4,
+        "y": 0
+      },
+      {
+        "type": "rock",
+        "x": 10,
+        "y": 0
+      },
+      {
+        "type": "rock",
+        "x": 11,
+        "y": 0
+      },
+      {
+        "type": "rock",
+        "x": 12,
+        "y": 0
+      },
+      {
+        "type": "rock",
+        "x": 13,
+        "y": 0
+      }
+    ]
+  }
+}

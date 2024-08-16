@@ -32,12 +32,19 @@ class Level:
         check_field_type("map.height", data["map"]["height"], "number")
         check_field_type("map.height", data["map"]["height"], "number")
         check_field_type("map.tiles", data["map"]["tiles"], "list")
-        check_field_type("map.spawns", data["map"]["spawns"], "list")
 
         self.Rules = data["rules"]
         self.Map = data["map"]
 
-        print(data)
+        self.Map["spawns"] = []
+
+        for index in reversed(range(len(self.Map["tiles"]))):
+            tile = self.Map["tiles"][index]
+
+            if tile["type"] == "player":
+                self.Map["spawns"].append({ "x": tile["x"], "y": tile["y"] })
+
+                self.Map["tiles"].pop(index)
 
 # Check Field Type
 def check_field_type(name: str, value: Any, type_name: str):

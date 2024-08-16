@@ -129,7 +129,7 @@ class Map:
  
         for tile_y in range(self.height):
             for tile_x in range(self.width):
-                if self.TILE_TYPES[self.foreground_tiles[i]]["destroyable"] and math.dist([x, y], [tile_x * 64, tile_y * 64]):
+                if self.TILE_TYPES[self.foreground_tiles[i]]["destroyable"] and math.dist([x, y], [tile_x * 64, tile_y * 64]) < self.Level.Rules["bomb_explode_range"]:
                     self.foreground_tiles[i] = "empty"
                         
 

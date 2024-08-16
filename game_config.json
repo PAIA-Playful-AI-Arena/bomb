@@ -20,7 +20,7 @@
       "verbose": "關卡名稱",
 
       "type": "str",
-      "default": "basic",
+      "default": "basic-2",
 
       "help": "The name of the level."
     },
