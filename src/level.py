@@ -36,13 +36,13 @@ class Level:
         self.Rules = data["rules"]
         self.Map = data["map"]
 
-        self.Map["spawns"] = []
+        self.Map["player_spawns"] = []
 
         for index in reversed(range(len(self.Map["tiles"]))):
             tile = self.Map["tiles"][index]
 
             if tile["type"] == "player":
-                self.Map["spawns"].append({ "x": tile["x"], "y": tile["y"] })
+                self.Map["player_spawns"].append({ "x": tile["x"], "y": tile["y"] })
 
                 self.Map["tiles"].pop(index)
 

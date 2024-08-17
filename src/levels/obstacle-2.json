@@ -1,0 +1,174 @@
+{
+  "rules": {
+    "player_speed": 5,
+    "player_bombs": 2,
+    "bomb_countdown": 150,
+    "bomb_explode_range": 125
+  },
+  "map": {
+    "width": 13,
+    "height": 6,
+    "tiles": [
+      {
+        "type": "rock",
+        "x": 5,
+        "y": 2
+      },
+      {
+        "type": "rock",
+        "x": 5,
+        "y": 3
+      },
+      {
+        "type": "rock",
+        "x": 6,
+        "y": 3
+      },
+      {
+        "type": "rock",
+        "x": 6,
+        "y": 2
+      },
+      {
+        "type": "rock",
+        "x": 2,
+        "y": 5
+      },
+      {
+        "type": "rock",
+        "x": 2,
+        "y": 0
+      },
+      {
+        "type": "rock2",
+        "x": 2,
+        "y": 1
+      },
+      {
+        "type": "rock2",
+        "x": 2,
+        "y": 4
+      },
+      {
+        "type": "player",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "type": "barrel",
+        "x": 0,
+        "y": 4
+      },
+      {
+        "type": "barrel",
+        "x": 1,
+        "y": 5
+      },
+      {
+        "type": "barrel",
+        "x": 0,
+        "y": 5
+      },
+      {
+        "type": "barrel",
+        "x": 1,
+        "y": 4
+      },
+      {
+        "type": "barrel",
+        "x": 2,
+        "y": 2
+      },
+      {
+        "type": "barrel",
+        "x": 2,
+        "y": 3
+      },
+      {
+        "type": "player",
+        "x": 12,
+        "y": 5
+      },
+      {
+        "type": "rock",
+        "x": 10,
+        "y": 5
+      },
+      {
+        "type": "rock",
+        "x": 10,
+        "y": 0
+      },
+      {
+        "type": "rock",
+        "x": 7,
+        "y": 2
+      },
+      {
+        "type": "rock",
+        "x": 7,
+        "y": 3
+      },
+      {
+        "type": "barrel",
+        "x": 11,
+        "y": 0
+      },
+      {
+        "type": "barrel",
+        "x": 12,
+        "y": 0
+      },
+      {
+        "type": "barrel",
+        "x": 12,
+        "y": 1
+      },
+      {
+        "type": "barrel",
+        "x": 11,
+        "y": 1
+      },
+      {
+        "type": "rock2",
+        "x": 10,
+        "y": 1
+      },
+      {
+        "type": "rock2",
+        "x": 10,
+        "y": 4
+      },
+      {
+        "type": "barrel",
+        "x": 10,
+        "y": 2
+      },
+      {
+        "type": "barrel",
+        "x": 10,
+        "y": 3
+      },
+      {
+        "type": "barrel",
+        "x": 6,
+        "y": 4
+      },
+      {
+        "type": "barrel",
+        "x": 6,
+        "y": 5
+      },
+      {
+        "type": "barrel",
+        "x": 6,
+        "y": 1
+      },
+      {
+        "type": "barrel",
+        "x": 6,
+        "y": 0
+      }
+    ]
+  }
+}
