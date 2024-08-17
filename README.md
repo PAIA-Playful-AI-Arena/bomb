@@ -1,6 +1,8 @@
 # 💣 炸彈人
 爆炸吧！訓練你的 AI 來控制角色的移動，放置與躲避炸彈，成為最會炸的炸彈人吧！
 
+![game demo](./documents/demo.png)
+
 ## 玩法介紹
 玩家需要在特定的時間內使用炸彈攻擊敵對玩家，獲得境可能多的分數。炸彈不會影響友方團隊的其他玩家，且當多個炸彈在彼此的爆炸範圍內就會產生 `連鎖爆炸`。另外地圖上的 `瓦磚 (Tile)` 會阻擋玩家的移動，玩家可以破壞地圖上 `可破壞的瓦磚` 來讓自己更好移動。
 
@@ -76,18 +78,18 @@ Game(level_name: str, level_file: Union[None, str], width: int = 750, height: in
 
 ## 座標系統
 遊戲內有兩種座標系統，`實際座標` 與 `顯示座標`。`實際座標` 為遊戲世界中實際的座標，`顯示座標` 則為顯示到螢幕上的座標，在這裡我們指的的座標都為 `實際座標`。
-![coordinate system](./assets/images/coordinate.png)
+![coordinate system](./documents/coordinate.png)
 
 ## 瓦磚矩陣資料
 瓦磚的矩陣資料為一個清單，長度為 `地圖寬度` x `地圖高度`。該清單中可以有三個值，分別為：
 * `0` 沒有瓦磚。
 * `1` 有可破壞的瓦磚。
 * `2` 有不可破壞的瓦磚。
-![tiles matrix data](./assets/images/tiles_matrix.png)
+![tiles matrix data](./documents/tiles_matrix.png)
 
 ## 玩家矩陣資料
 玩家的矩陣資料與[瓦磚矩陣資料](#瓦磚矩陣資料)類似，只是清單中的值由在該位置的敵對玩家數所決定：
-![players matrix data](./assets/images/players_matrix.png)
+![players matrix data](./documents/players_matrix.png)
 
 ## 炸彈矩陣資料
 炸彈的矩陣資料與[玩家矩陣資料](#玩家矩陣資料)相同，只是清單中的直由在該位置的敵對玩家炸彈數所決定。
