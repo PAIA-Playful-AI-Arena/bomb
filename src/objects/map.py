@@ -14,7 +14,8 @@ class Map:
         "ground_dark": { "image": "ground_dark", "destroyable": False },
 
         "barrel": { "image": "barrel", "destroyable": True },
-        "rock": { "image": "rock", "destroyable": False }
+        "rock": { "image": "rock", "destroyable": False },
+        "rock2": { "image": "rock2", "destroyable": False }
     }
 
     # Initialize The Object
@@ -47,6 +48,7 @@ class Map:
         assets.append(create_image_asset("images/ground_dark.png", 64, 64))
         assets.append(create_image_asset("images/barrel.png", 64, 64))
         assets.append(create_image_asset("images/rock.png", 64, 64))
+        assets.append(create_image_asset("images/rock2.png", 64, 64))
     
     # Resize The Map
     def resize(self, width: int, height: int):
