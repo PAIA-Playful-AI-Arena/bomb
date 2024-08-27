@@ -21,7 +21,14 @@ class Level:
                 "tiles": [],
                 "spawns": []
             }
-        } | json.load(open(level_file))
+        }
+
+        json_data = json.load(open(level_file))
+
+        if json_data["compressionlevel"] != None:
+            json_data = convert(json_data)
+
+        data = data | json_data
 
         check_field_type("rules.player_speed", data["rules"]["player_speed"], "number")
         check_field_type("rules.player_bombs", data["rules"]["player_bombs"], "number")
@@ -42,7 +49,8 @@ class Level:
             tile = self.Map["tiles"][index]
 
             if tile["type"] == "player":
-                self.Map["player_spawns"].append({ "x": tile["x"], "y": tile["y"] })
+                if len(self.Map["player_spawns"]) < 4:
+                    self.Map["player_spawns"].append({ "x": tile["x"], "y": tile["y"] })
 
                 self.Map["tiles"].pop(index)
 
@@ -54,3 +62,18 @@ def check_field_type(name: str, value: Any, type_name: str):
         raise Exception(f"Type Error: Field \"{name}\" Must Be The \"string\" Type")
     elif type_name == "list" and type(value) is not list:
         raise Exception(f"Type Error: Field \"{name}\" Must Be The \"list\" Type")
+
+# Convert The Tiled Format
+def convert(data: dict):
+    tiles = []
+
+    index = 0
+
+    for x in range(data["width"]):
+        for y in range(data["height"]):
+            if data["layers"][0]["data"][index] > 0:
+                tiles.append({ "type": ['barrel', 'rock', 'rock2', 'player'][data["layers"][0]["data"][index] - 1], "x": x, "y": y })
+
+            index = index + 1
+
+    return { "map": { "width": data["width"], "height": data["height"], "tiles": tiles }}

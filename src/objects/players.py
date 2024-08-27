@@ -160,7 +160,7 @@ class Players:
 
         for _, player_data in self.players_data.items():
             if player_data["team"] != team_id:
-                index = round(player_data["x"] / 64) + (round(player_data["y"] / 64) * self.Level.Map["width"])
+                index = math.floor(player_data["x"] / 64) + (math.floor(player_data["y"] / 64) * self.Level.Map["width"])
 
                 matrix[index] = matrix[index] + 1
 
