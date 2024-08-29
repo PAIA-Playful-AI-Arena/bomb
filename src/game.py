@@ -14,6 +14,8 @@ class Game(PaiaGame):
     def __init__(self, level_name: str, level_file: Union[None, str], width: int = 750, height: int = 500, user_num: int = 1, game_duration: int = 10, team_mode: str = "off", *args, **kwargs):
         super().__init__(user_num = user_num)
 
+        level_file = "/Users/lmantw/Desktop/Programming/未命名.tmj"
+
         if level_file == None:
             level_file = path.join(path.dirname(__file__), "levels/" + level_name + ".json")
 

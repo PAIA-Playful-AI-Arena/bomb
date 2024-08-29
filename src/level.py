@@ -28,7 +28,9 @@ class Level:
         if json_data["compressionlevel"] != None:
             json_data = convert(json_data)
 
-        data = data | json_data
+        data = merge(data, json_data)
+
+        print(json_data)
 
         check_field_type("rules.player_speed", data["rules"]["player_speed"], "number")
         check_field_type("rules.player_bombs", data["rules"]["player_bombs"], "number")
@@ -44,6 +46,8 @@ class Level:
         self.Map = data["map"]
 
         self.Map["player_spawns"] = []
+
+        print(self.Map)
 
         for index in reversed(range(len(self.Map["tiles"]))):
             tile = self.Map["tiles"][index]
@@ -65,6 +69,12 @@ def check_field_type(name: str, value: Any, type_name: str):
 
 # Convert The Tiled Format
 def convert(data: dict):
+    rules = {}
+    
+    for property in data["properties"]:
+        if property["name"] in ["player_speed", "player_bombs", "bomb_countdown", "bomb_explode_range"]:
+            rules[property["name"]] = property["value"]
+
     tiles = []
 
     index = 0
@@ -76,4 +86,17 @@ def convert(data: dict):
 
             index = index + 1
 
-    return { "map": { "width": data["width"], "height": data["height"], "tiles": tiles }}
+    return { "rules": rules, "map": { "width": data["width"], "height": data["height"], "tiles": tiles }}
+
+# Merge Two Dictionaries
+def merge(a: dict, b: dict):
+    for key in b:
+        if key in a:
+            if isinstance(a[key], dict) and isinstance(b[key], dict):
+                merge(a[key], b[key])
+            else:
+                a[key] = b[key]
+        else:
+            a[key] = b[key]
+
+    return a
