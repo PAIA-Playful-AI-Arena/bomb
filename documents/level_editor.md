@@ -1,10 +1,10 @@
 # 🛠 關卡編輯器
-我們有自己的關卡編輯器，但你也可以使用 Tiled 來編輯關卡。
+我們有自己的關卡編輯器，但你也可以使用 [Tiled](https://www.mapeditor.org) 來編輯關卡。
 
 ## 炸彈人關卡編輯器
 ![bomb editor guide](./images/bomb_level_editor.png)
 
-* 關卡編輯器連結 - https://lmantw.github.io/bomb-editor/
+* 關卡編輯器連結 - https://lmantw.github.io/bomb-editor
 
 ## Tiled 編輯器
 
