@@ -32,7 +32,7 @@ Game(level_name: str, level_file: Union[None, str], width: int = 750, height: in
   * 只在玩家數量為 2 個以上時才有用，在 3 個玩家時會有一對只有一個玩家。
 
 ## 關卡參數
-我們使用 JSON 來作為關卡的檔案格式，你可以用我們的[關卡編輯器](https://lmantw.github.io/bomb-editor/)來編輯關卡或手動更改關卡檔案，以下為一個簡單的範例：
+我們使用 JSON 來作為關卡的檔案格式 (與 Tiled 的格式不同，我們同時支援兩種格式)，你可以查看[關卡編輯器的文檔](./documents/level_editor.md)來使用關卡編輯器或手動更改關卡檔案，以下為一個簡單的範例：
 ```json
 {
   "rules": {

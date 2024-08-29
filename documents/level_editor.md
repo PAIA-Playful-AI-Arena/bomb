@@ -4,9 +4,13 @@
 ## 炸彈人關卡編輯器
 ![bomb editor guide](./images/bomb_level_editor.png)
 
+* 關卡編輯器連結 - https://lmantw.github.io/bomb-editor/
+
 ## Tiled 編輯器
 
 ![tiled editor guide](./images/tiled_level_editor.png)
+
+(另外可參考 [Maze Car](https://github.com/PAIA-Playful-AI-Arena/Maze_Car) 的 [迷宮製作教學](https://github.com/PAIA-Playful-AI-Arena/Maze_Car/blob/main/map_editor.md))
 
 * 瓦塊集
 
