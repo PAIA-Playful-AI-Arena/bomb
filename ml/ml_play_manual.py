@@ -17,7 +17,7 @@ class MLPlay:
         elif pygame.K_s in keyboard:
             commands.append("move_down")
         
-        if pygame.K_z in keyboard:
+        if pygame.K_g in keyboard:
             commands.append("place_bomb")
 
         return commands

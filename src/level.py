@@ -25,12 +25,10 @@ class Level:
 
         json_data = json.load(open(level_file))
 
-        if json_data["compressionlevel"] != None:
+        if "compressionlevel" in json_data:
             json_data = convert(json_data)
 
         data = merge(data, json_data)
-
-        print(json_data)
 
         check_field_type("rules.player_speed", data["rules"]["player_speed"], "number")
         check_field_type("rules.player_bombs", data["rules"]["player_bombs"], "number")
@@ -46,8 +44,6 @@ class Level:
         self.Map = data["map"]
 
         self.Map["player_spawns"] = []
-
-        print(self.Map)
 
         for index in reversed(range(len(self.Map["tiles"]))):
             tile = self.Map["tiles"][index]
