@@ -78,7 +78,7 @@ class Bombs:
 
         for bomb_data in self.bombs_data:
             if self.Players.players_data[bomb_data["owner"]]["team"] != team_id:
-                index = round(bomb_data["x"] / 64) + (round(bomb_data["y"] / 64) * self.Level.Map["width"])
+                index = math.floor(bomb_data["x"] / 64) + (math.floor(bomb_data["y"] / 64) * self.Level.Map["width"])
 
                 matrix[index] = matrix[index] + 1
 
