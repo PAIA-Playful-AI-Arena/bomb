@@ -4,7 +4,6 @@ import math
 
 from ..loader import create_image_asset
 from ..level import Level
-from .map import Map
 
 # The Players Object
 class Players:
@@ -17,7 +16,7 @@ class Players:
     # Initialize The Object
     def __init__(self, level: Level, player_amount: int, team_mode: bool):
         if player_amount > len(level.Map["player_spawns"]):
-            raise Exception(f"Player Amount Out Of Bounds: {player_amount} (Max {len(level.Map["spawns"])})")
+            raise Exception(f"Player Amount Out Of Bounds: {player_amount} (Max {len(level.Map['spawns'])})")
 
         self.Level = level
 
@@ -36,7 +35,9 @@ class Players:
 
                 "rotate_speed": -level.Rules["player_speed"] / 33.33333,
                 "target_angle": 0,
-                "angle": 0
+                "angle": 0,
+
+                "flash": 0
             }
 
         if player_amount == 4 and team_mode:
@@ -55,6 +56,7 @@ class Players:
     # Add The All Assets Needed By The Players
     def add_assets(self, assets: list):
         assets.append(create_image_asset("images/player.png", 64, 64))
+        assets.append(create_image_asset("images/player_flash.png", 64, 64))
 
         assets.append(create_image_asset("images/bomb_icon_blue.png", 64, 64))
         assets.append(create_image_asset("images/bomb_icon_red.png", 64, 64))
@@ -178,6 +180,7 @@ class Players:
                 self.players_data[owner]["score"] += 2
 
                 player_data["score"] -= 1
+                player_data["flash"] = 12
 
                 spawns = []
 
@@ -240,6 +243,12 @@ class Players:
                 if player_data["place_bomb_cooldown"] > 0:
                     player_data["place_bomb_cooldown"] -= 1
 
+        for _, player_data in self.players_data.items():
+            if player_data["flash"] > 0:
+                player_data["flash"] -= 0.1
+            elif player_data["flash"] < 0:
+                player_data["flash"] = 0
+
         # Update the team score.
 
         teams_score = self.get_teams_score()
@@ -274,7 +283,7 @@ class Players:
             objects_info.append({
                 "layer": 10,
                 "object": create_image_view_data(
-                    "player",
+                    "player" if (round(player_data["flash"]) % 2) == 0 else "player_flash",
 
                     render_x - (player_render_size / 2),
                     render_y - (player_render_size / 2),

@@ -204,7 +204,7 @@ class Bombs:
             objects_info.append({
                 "layer": 20,
                 "object": create_image_view_data(
-                    f"explosion_{explosion_cloud["animation"]}",
+                    f"explosion_{explosion_cloud['animation']}",
 
                     map_render_offset_x + (((tile_size / 64) * explosion_cloud["x"]) - (explosion_cloud_size / 2)),
                     map_render_offset_y + (((tile_size / 64) * explosion_cloud["y"]) - (explosion_cloud_size / 2)),
