@@ -180,7 +180,7 @@ class Players:
                 self.players_data[owner]["score"] += 2
 
                 player_data["score"] -= 1
-                player_data["flash"] = 12
+                player_data["flash"] = 6
 
                 spawns = []
 
