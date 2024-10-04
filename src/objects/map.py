@@ -49,7 +49,7 @@ class Map:
         assets.append(create_image_asset("images/barrel.png", 64, 64))
         assets.append(create_image_asset("images/rock.png", 64, 64))
         assets.append(create_image_asset("images/rock2.png", 64, 64))
-    
+        # TODO 這個寫法可讀性不高，不如回傳上面這些給外面的使用
     # Resize The Map
     def resize(self, width: int, height: int):
         self.tile_size = 0

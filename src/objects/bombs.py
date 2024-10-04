@@ -57,10 +57,12 @@ class Bombs:
 
     # Bomb Exploded
     def bomb_exploded(self, owner: str, x: int, y: int):
+
         self.Map.bomb_exploded(x, y)
         self.Players.bomb_exploded(owner, x, y)
 
         for bomb_data in self.bombs_data:
+            # TODO 這裡是判斷爆炸有效範圍的地方
             if math.dist([x, y], [bomb_data["x"], bomb_data["y"]]) < self.Level.Rules["bomb_explode_range"]:
                 if bomb_data["countdown"] > math.floor(self.Level.Rules["bomb_countdown"] / 10):
                     bomb_data["countdown"] = math.floor(self.Level.Rules["bomb_countdown"] / 10)

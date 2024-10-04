@@ -35,6 +35,7 @@ class Game(PaiaGame):
     def get_scene_init_data(self):
         assets = []
 
+        # TODO 這樣的寫法太過隱晦，可讀性不高，儘量不要使用 "輸出型參數"
         self.Map.add_assets(assets)
         self.Players.add_assets(assets)
         self.Bombs.add_assets(assets)
@@ -58,6 +59,7 @@ class Game(PaiaGame):
             self.Bombs.update(commands)
 
             self.frame_count += 1
+    # TODO 遊戲結束 應該要回傳 QUIT or RESET
 
     # Get The Data For The Players
     def get_data_from_game_to_player(self):
@@ -72,6 +74,7 @@ class Game(PaiaGame):
 
             if self.frame_count >= self.game_duration:
                 if player_data["team"] == winning_team:
+                    # TODO 應該用成 GameStatus.GAME_1P_WIN GameStatus.GAME_2P_WIN
                     status = GameStatus.GAME_PASS
                 else:
                     status = GameStatus.GAME_OVER
@@ -98,7 +101,7 @@ class Game(PaiaGame):
     # Get The Scene Progress Data (Render)
     def get_scene_progress_data(self):
         objects_info = []
-
+        # TODO 這裡的寫法也是同樣問題，儘量不要使用 "輸出型參數"
         self.Time.render(self.width, self.height, objects_info, self.game_duration, self.frame_count)
         self.Map.render(objects_info)
         self.Players.render(self.width, self.height, objects_info, self.Map.render_offset_x, self.Map.render_offset_y, self.Map.tile_size)
@@ -110,7 +113,7 @@ class Game(PaiaGame):
 
         for object_info in objects_info:
             sorted_objects.append(object_info["object"])
-
+        # TODO 使用 helper function create_scene_progress_data
         return {
             "frame": self.frame_count,
 
@@ -131,8 +134,10 @@ class Game(PaiaGame):
 
         return {
             "frame_used": self.frame_count,
+            # TODO 這裡應該使用 GameResultState
             "status": GameStatus.GAME_ALIVE if self.frame_count < self.game_duration else GameStatus.GAME_OVER,
             "attachment": [
+                # TODO 需要 rank
                 {
                     "player_num": "1P"
                 }
