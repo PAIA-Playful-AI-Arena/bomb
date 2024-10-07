@@ -20,4 +20,4 @@
   * `player_speed: int` 玩家的移動速度。
   * `player_bombs: int` 玩家的炸彈數。
   * `bomb_countdown: int` 炸彈的爆炸倒數時長 (幀數)。
-  * `bomb_explode_range: int` 炸彈的爆炸範圍。
+  * `bomb_explosion_range: int` 炸彈的爆炸範圍。

@@ -25,7 +25,7 @@
       "help": "The name of the level."
     },
     {
-      "name": "level_file",
+      "name": "level_path",
       "verbose": "關卡檔案",
 
       "type": "path",

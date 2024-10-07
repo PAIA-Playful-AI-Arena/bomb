@@ -13,14 +13,18 @@
         ["scene_info['status']", "game status", "遊戲狀態"],
         ["scene_info['frame']", "# frame", "# 幀數"],
 
-        ["scene_info['team']", "player team", "玩家所屬團隊"],
         ["scene_info['score']", "player score", "玩家分數"],
         ["scene_info['bombs']", "player bombs", "玩家剩餘炸彈數"],
+        ["scene_info['place_bomb_cooldown']", "player place bomb cooldown", "玩家放置炸彈的冷卻時間"],
 
+        ["scene_info['width']", "map width", "地圖寬度"],
+        ["scene_info['height']", "map height", "地圖高度ㄊㄊ"],
         ["scene_info['x']", "player x", "玩家 X 座標"],
         ["scene_info['y']", "player y", "玩家 Y 座標"],
 
-        ["scene_info['bombs_matrix']", "bombs matrix", "敵對炸彈的矩陣資料"]
+        ["scene_info['map_matrix']", "bombs matrix", "瓦磚的矩陣資料"],
+        ["scene_info['player_matrix']", "player matrix", "敵對玩家的矩陣資料"],
+        ["scene_info['bomb_matrix']", "bombs matrix", "敵對炸彈的矩陣資料"]
     ],
 
     "CONSTANT": [
