@@ -75,9 +75,24 @@ class Level:
 
         # Both the native and Tiled format are supported.
         if "compressionlevel" in data:
-            # TODO
+            tiles: List[dict] = []
+            index: int = 0
 
-            return
+            layer = data["layers"][0]["data"]
+
+            for x in range(data["width"]):
+                for y in range(data["height"]):
+                    if layer[index] > 0:
+                        tiles.append({ "type": ['barrel', 'rock', 'rock2', 'player'][layer[index] - 1], "x": x, "y": y })
+
+                    index += 1
+
+            self.Rules = Rules(data["properties"] if "properties" in data else {})
+            self.Map = Map({
+                "width": data["width"],
+                "height": data["height"],
+                "tiles": tiles
+            })
         else:
             self.Rules = Rules(data["rules"])
             self.Map = Map(data["map"])

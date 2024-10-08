@@ -3,7 +3,7 @@
     "player_speed": 5,
     "player_bombs": 2,
     "bomb_countdown": 150,
-    "bomb_explosion_range": 125
+    "bomb_explode_range": 125
   },
   "map": {
     "width": 10,
