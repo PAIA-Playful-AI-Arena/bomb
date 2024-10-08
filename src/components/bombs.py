@@ -90,14 +90,16 @@ class Bombs:
 
                 # Destory the destroyable tiles in the explosion range.
                 for tile in self.Map.get_foreground_tiles_with_position():
-                    if self.Map.TILE_TYPES[tile["type"]]["destroyable"] and self.get_explosion_amount(None, tile["x"] - 32, tile["y"] - 32) > 0:
+                    if self.Map.TILE_TYPES[tile["type"]]["destroyable"] and self.get_explosion_amount(None, tile["x"] + 32, tile["y"] + 32) > 0:
                         self.Map.set_foreground_tile("empty", math.floor(tile["x"] / 64), math.floor(tile["y"] / 64))
 
                 # Kill the players that are in the explosion range.
                 for _, player in self.Players.players.items():
                     if self.get_explosion_amount(player.team, player.x, player.y) > 0:
                         self.Players.players[bomb.owner].score += 2
+
                         player.score -= 1
+                        player.flash = 6
 
                         player.kill(self.Players.get_enemies_position(player.team))
 

@@ -1,5 +1,6 @@
 from mlgame.view.view_model import create_image_view_data, create_text_view_data
 from typing import List, Dict
+import random
 import pygame
 import math
 
@@ -125,6 +126,7 @@ class Players:
 
         self.Level = level
         self.Map = map
+
         self.players: Dict[str, Player] = {}
 
         for index in range(amount):
@@ -230,6 +232,11 @@ class Players:
             # Update the walking animation.
             player.angle += (player.target_angle - player.angle) / 1.5
 
+            if player.flash > 0:
+                player.flash -= 0.1
+            elif player.flash < 0:
+                player.flash = 0
+
         # Update the teams' score.
         for team, _ in self.target_teams_score.items():
             self.target_teams_score[team] = 0
@@ -253,7 +260,7 @@ class Players:
             render_x = self.Map.render_offset_x + ((self.Map.tile_size / 64) * player.x)
             render_y = self.Map.render_offset_y + ((self.Map.tile_size / 64) * player.y)
 
-            if abs(player.angle > 0.001):
+            if abs(player.angle) > 0.001:
                 render_y -= abs(player.angle) * (player_render_size / 1.25)
 
             # Add the sprite for the player itself.
