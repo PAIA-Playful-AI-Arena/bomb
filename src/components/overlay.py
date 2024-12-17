@@ -1,144 +1,179 @@
-from mlgame.view.view_model import create_rect_view_data, create_text_view_data, create_image_view_data
-
+from mlgame.view.view_model import create_image_view_data, create_text_view_data
+from math import cos, sin, radians
 from typing import List
-import math
+import pygame
 
-from .players import Players
+from ..constants import TEAM_COLORS
 
-# Overlay
-class Overlay:
-    # Initialize The Component
-    def __init__(self, players: Players) -> None:
-        self.Players = players
+# Render the info of the player.
+def render_player_info(overlay_render_size: float, name: str, team: int, bomb_amount: int, x: float, y: float) -> List[dict]:
+    frame_render_size = overlay_render_size * 3
 
-    # Get The Sprites To Render
-    def get_sprites(self, width: int, height: int, game_duration: int, frame_count: int) -> List[dict]:
-        sprites: List[dict] = []
+    font = pygame.font.Font(None, round(overlay_render_size * 0.6))
+    font.set_bold(True)
 
-        overlay_size = (width + height) / 100
-        
-        total_score: float = 0
-        score_bar_x: int = 0
+    bomb_amount_text_size = font.size(f"x{bomb_amount}")
 
-        # Sum up the score of all the teams.
-        for _, score in self.Players.teams_score.items(): 
-            total_score += score + 1
+    return [
+        {
+            "layer": 9,
+            "data": create_image_view_data(
+                "overlay_frame",
 
-        # Draw the score bar.
-        for team, score in self.Players.teams_score.items():
-            score_bar_width = math.ceil((width / total_score) * (score + 1))
+                x - (frame_render_size / 2),
+                y - (frame_render_size / 2),
 
-            sprites.append({
-                "layer": 99,
-                "data": create_rect_view_data(
-                    "score_bar",
-
-                    score_bar_x,
-                    0,
-
-                    score_bar_width,
-                    int(overlay_size * 0.5),
-
-                    self.Players.TEAM_COLORS[team]
-                )
-            })
-
-            score_bar_x += score_bar_width
-
-        text_x = overlay_size
-
-        # Draw the statistics of the players.
-        for name, player in self.Players.players.items():
-            # Draw the player name and score.
-            sprites.append({
-                "layer": 99,
-                "data": create_text_view_data(
-                    name + ': ' + str(player.score),
-
-                    int(text_x),
-                    int(overlay_size * 1.25),
-
-                    self.Players.TEAM_COLORS[player.team],
-
-                    str(round(overlay_size * 2.5)) + 'px Bold'
-                )
-            })
-
-            props: List[str] = []
-            prop_x = text_x
-            prop_y = overlay_size * 3
-
-            for _ in range(player.bombs):
-                props.append(self.Players.TEAM_BOMB_ICONS[player.team])
-
-            # Draw the player props.
-            for prop in props:
-                sprites.append({
-                    "layer": 99,
-                    "data": create_image_view_data(
-                        prop,
-
-                        prop_x,
-                        prop_y,
-
-                        overlay_size * 1.5,
-                        overlay_size * 1.5
-                    )
-                })
-
-                prop_x += overlay_size * 1.25
-
-                if (prop_x + (overlay_size * 1.25) >= text_x + ((width - (overlay_size * 2)) / len(self.Players.players)) or prop_x + (overlay_size * 1.25) >= width):
-                    prop_x = text_x
-                    prop_y += overlay_size * 1.5
-
-            text_x += (width - (overlay_size * 2)) / len(self.Players.players)
-
-        # Draw the time bar background.
-        sprites.append({
-            "layer": 99,
-            "data": create_rect_view_data(
-                'time_bar_background',
-        
-                0,
-                int(height - (overlay_size * 0.5)),
-
-                width,
-                int(overlay_size * 0.5),
-
-                '#000000'
+                frame_render_size,
+                frame_render_size
             )
-        })
+        },
+        {
+            "layer": 9,
+            "data": create_image_view_data(
+                f"icon_player_{team}",
 
-        # Draw the time bar background.
-        sprites.append({
-            "layer": 100,
-            "data": create_rect_view_data(
-                'time_bar',
-        
-                0,
-                int(height - (overlay_size * 0.5)),
+                x - (overlay_render_size * 1.3),
+                y - (overlay_render_size * 0.95),
 
-                int((width / game_duration) * frame_count),
-                int(overlay_size * 0.5),
-
-                '#ffffff'
+                overlay_render_size * 0.85,
+                overlay_render_size * 0.85
             )
-        })
-
-        # Draw the time bar text.
-        sprites.append({
-            "layer": 100,
+        },
+        {
+            "layer": 9,
             "data": create_text_view_data(
-                str(frame_count) + " / " + str(game_duration),
+                name,
 
-                int(overlay_size),
-                int(height - (overlay_size * 2)),
+                x - (overlay_render_size * 0.225),
+                y - (overlay_render_size * 0.725),
 
-                '#ffffff',
-
-                str(round(overlay_size * 1.5)) + 'px Bold'
+                TEAM_COLORS[team - 1],
+                f'{round(overlay_render_size * 0.65)}px bold Arial'
             )
-        })
+        },
+        {
+            "layer": 9,
+            "data": create_image_view_data(
+                f"icon_bomb_{team}",
+
+                (x + (overlay_render_size * 0.15)) - (bomb_amount_text_size[0] / 2),
+                y + (overlay_render_size * 0.075),
+
+                overlay_render_size * 0.55,
+                overlay_render_size * 0.55
+            )
+        },
+        {
+            "layer": 9,
+            "data": create_text_view_data(
+                f"x{bomb_amount}",
+
+                (x + (overlay_render_size * 0.75)) - (bomb_amount_text_size[0] / 2),
+                y + (overlay_render_size * 0.175),
+
+                TEAM_COLORS[team - 1],
+                f'{round(overlay_render_size * 0.6)}px bold Arial'
+            )
+        },
+    ]
+
+# The overlay itself.
+class Overlay:
+    # Initialize the overlay.
+    def __init__(self, window_width: int, window_height: int) -> None:
+        self.window_width = window_width
+        self.window_height = window_height
+
+        self.overlay_render_height = window_height * 0.6
+        self.overlay_render_width = 512 * (self.overlay_render_height / 1124)
+
+        self.overlay_render_size = (self.overlay_render_width + self.overlay_render_height) * 0.075
+
+        return
+
+    # Render the overlay.
+    def render(self, players: dict) -> List[dict]:
+        left_background_render_x = self.overlay_render_size * 0.5
+        left_background_render_y = (self.window_height / 2) - (self.overlay_render_height / 2)
+        right_background_render_x = self.window_width - (self.overlay_render_width + (self.overlay_render_size * 0.5))
+        right_background_render_y = (self.window_height / 2) - (self.overlay_render_height / 2)
+
+        sprites = [
+            {
+                "layer": 9,
+                "data": create_image_view_data(
+                    "overlay_background",
+
+                    left_background_render_x,
+                    left_background_render_y,
+                
+                    self.overlay_render_width,
+                    self.overlay_render_height
+                )
+            },
+            {
+                "layer": 9,
+                "data": create_image_view_data(
+                    "overlay_background",
+
+                    right_background_render_x,
+                    right_background_render_y,
+                    
+                    self.overlay_render_width,
+                    self.overlay_render_height
+                )
+            }
+        ]
+
+        player_icon_background_width = self.overlay_render_size * 2
+        player_icon_background_height = self.overlay_render_size * 0.8
+
+        # Render players' on the left layout.
+        if "1P" in players:
+            sprites.extend(render_player_info(
+                self.overlay_render_size,
+
+                players["1P"].name,
+                players["1P"].team,
+                players["1P"].bomb_amount,
+
+                left_background_render_x + (self.overlay_render_width / 2),
+                left_background_render_y + ((self.overlay_render_height / 2) - (self.overlay_render_height / 5))
+            ))
+        if "2P" in players:
+            sprites.extend(render_player_info(
+                self.overlay_render_size,
+
+                players["2P"].name,
+                players["2P"].team,
+                players["2P"].bomb_amount,
+
+                left_background_render_x + (self.overlay_render_width / 2),
+                left_background_render_y + ((self.overlay_render_height / 2) + (self.overlay_render_height / 5))
+            ))
+
+        # Render players' on the right layout.
+        if "3P" in players:
+            sprites.extend(render_player_info(
+                self.overlay_render_size,
+
+                players["3P"].name,
+                players["3P"].team,
+                players["3P"].bomb_amount,
+
+                right_background_render_x + (self.overlay_render_width / 2),
+                right_background_render_y + ((self.overlay_render_height / 2) - (self.overlay_render_height / 5))
+            ))
+        if "4P" in players:
+            sprites.extend(render_player_info(
+                self.overlay_render_size,
+
+                players["4P"].name,
+                players["4P"].team,
+                players["4P"].bomb_amount,
+
+                right_background_render_x + (self.overlay_render_width / 2),
+                right_background_render_y + ((self.overlay_render_height / 2) + (self.overlay_render_height / 5))
+            ))
 
         return sprites
