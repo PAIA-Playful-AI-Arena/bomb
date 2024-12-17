@@ -1,106 +1,100 @@
 from mlgame.view.view_model import create_image_view_data
-from typing import List, Union
-import random
-import math
+from typing import Union, List
+from random import randint
+from math import floor
 
+from .overlay import Overlay
 from ..level import Level
 
-# Create A Tile Type
+# Create a tile type.
 def create_tile_type(image: Union[None, str], destroyable: bool):
     return {
         "image": image,
         "destroyable": destroyable
     }
 
-# Map
+# The map itself.
 class Map:
-    TILE_TYPES: dict = {
+    TILE_TYPES = {
         "empty": create_tile_type(None, False),
-
-        "ground_light": create_tile_type("tile_ground_light", False),
-        "ground_dark": create_tile_type("tile_ground_dark", False),
 
         "barrel": create_tile_type("tile_barrel", True),
         "rock": create_tile_type("tile_rock", False),
-        "rock2": create_tile_type("tile_rock2", False)
     }
 
-    # Initialize The Component
-    def __init__(self, level: Level, width: int, height: int) -> None:
+    # Initialize the map.
+    def __init__(self, level: Level, overlay: Overlay) -> None:
         self.Level = level
 
         self.width = level.Map.width
         self.height = level.Map.height
-        self.shake: float = 0
+        self.window_width = overlay.window_width
+        self.window_height = overlay.window_height
 
-        self.background_tiles: List[str] = []
-        self.foreground_tiles: List[str] = []
+        self.tiles = []
 
-        # Generate the background tiles.
-        for _ in range(level.Map.width * level.Map.height):
-            if random.randint(0, 2) > 0:
-                self.background_tiles.append("ground_dark")
-            else:
-                self.background_tiles.append("ground_light")
+        # Generate an 2D matrix representing the tiles.
+        for _ in range(self.width * self.height):
+            self.tiles.append("empty")
 
-            self.foreground_tiles.append("empty")
-
-        # Set the foreground tiles
+        # Load the tiles.
         for tile in level.Map.tiles:
-            self.set_foreground_tile(tile["type"], tile["x"], tile["y"])
+            self.set_tile(tile["type"], tile["x"], tile["y"])
 
-        # Set the size of the tiles according to the size of the window.
-        if width > height:
-            self.tile_size = width / (self.width + 1)
+        # Set the render size of the tiles according to the size of the window.
+        if self.window_width > self.window_height:
+            self.tile_render_size = self.window_width / (self.width + 1)
         else:
-            self.tile_size = height / (self.height + 1)
+            self.tile_render_size = self.window_height / (self.height + 1)
 
-        # Fix tiles overflowing.
-        if self.tile_size * self.width > width:
-            self.tile_size = width / (self.width + 1)
-        elif self.tile_size * self.height > height:
-            self.tile_size = height / (self.height + 1)
+        available_width = self.window_width - ((overlay.overlay_render_width * 2) + (overlay.overlay_render_size * 1.6))
+        available_height = self.window_height - overlay.overlay_render_size
 
-        self.tile_size = math.floor(self.tile_size * 0.99999)
+        # Fix the tiles from overflowing.
+        if self.tile_render_size * self.width > available_width:
+            self.tile_render_size = available_width / self.width
+        elif self.tile_render_size * self.height > available_height:
+            self.tile_render_size = available_height / self.height
 
-        self.target_render_offset_x = round((width / 2) - ((self.width / 2) * self.tile_size), 0)
-        self.target_render_offset_y = round((height / 2) - ((self.height / 2) * self.tile_size), 0)
+        self.tile_render_size = floor(self.tile_render_size * 0.99999)
+
+        self.target_render_offset_x = round((self.window_width / 2) - ((self.width / 2) * self.tile_render_size), 0)
+        self.target_render_offset_y = round((self.window_height / 2) - ((self.height / 2) * self.tile_render_size), 0)
         self.render_offset_x = self.target_render_offset_x
         self.render_offset_y = self.target_render_offset_y
 
-    # Get A Background Tile
-    def get_background_tile(self, x: int, y: int) -> str:
-        if x + (y * self.width) < 0 or x + (y * self.width) >= len(self.background_tiles):
-            raise Exception(f"Error: Tile position {x}, {y} out of bounds ({self.width}, {self.height})")
+        self.render_shake = 0
+        self.shake_render_offset_x = 0
+        self.shake_render_offset_y = 0
 
-        return self.background_tiles[x + (y * self.width)]
+    # Get a tile.
+    def get_tile(self, x: int, y: int) -> str:
+        index = x + (y * self.width)
 
-    # Get A Foreground Tile
-    def get_foreground_tile(self, x: int, y: int) -> str:
-        if x + (y * self.width) < 0 or x + (y * self.width) >= len(self.foreground_tiles):
-            raise Exception(f"Error: Tile position {x}, {y} out of bounds ({self.width}, {self.height})")
+        if index < 0 or index >= len(self.tiles):
+            raise Exception(f"[Error] Tile position {x}, {y} is out of bounds! ({self.width}, {self.height})")
 
-        return self.foreground_tiles[x + (y * self.width)]
-    
-    # Get Foreground Tiles With Position
-    def get_foreground_tiles_with_position(self) -> List[dict]:
+        return self.tiles[index]
+
+    # Get the tiles with position.
+    def get_tiles_with_position(self) -> List[dict]:
         tiles: List[dict] = []
         index: int = 0
  
         for y in range(self.height):
             for x in range(self.width):
-                if self.foreground_tiles[index] != "empty":
-                    tiles.append({ "type": self.foreground_tiles[index], "x": x * 64, "y": y * 64, "index": index })
+                if self.tiles[index] != "empty":
+                    tiles.append({ "type": self.tiles[index], "x": (x * 64), "y": (y * 64), "map_x": x, "map_y": y })
 
                 index += 1
 
         return tiles
 
-    # Get A Matrix Of Foreground Tiles
-    def get_foreground_tile_matrix(self) -> List[int]:
-        matrix: List[int] = []
+    # Get a matrix of tiles.
+    def get_tile_matrix(self) -> List[int]:
+        matrix = []
 
-        for tile_type in self.foreground_tiles:
+        for tile_type in self.tiles:
             if self.TILE_TYPES[tile_type]["image"] == None:
                 matrix.append(0)
             else:
@@ -111,49 +105,64 @@ class Map:
 
         return matrix
 
-    # Set A Foreground Tile
-    def set_foreground_tile(self, tile_type: str, x: int, y: int) -> None:
+    # Set a tile.
+    def set_tile(self, tile_type: str, x: int, y: int) -> None:
+        index = x + (y * self.width)
+
         if tile_type not in self.TILE_TYPES:
-            raise Exception(f"Error: Tile type \"{tile_type}\" not found ({x}, ${y})")
+            raise Exception(f"[Error] Tile type \"{tile_type}\" not found! ({x}, ${y})")
+        if index < 0 or index >= len(self.tiles):
+            raise Exception(f"[Error] Tile position {x}, {y} is out of bounds! ({self.width}, {self.height})")
 
-        self.foreground_tiles[x + (y * self.width)] = tile_type
+        self.tiles[index] = tile_type
 
-    # Update The Map
-    def update(self):
-        self.shake = self.shake * 0.8
-        self.render_offset_x = self.target_render_offset_x + random.randint(round(-self.shake * self.tile_size), round(self.shake * self.tile_size))
-        self.render_offset_y = self.target_render_offset_y + random.randint(round(-self.shake * self.tile_size), round(self.shake * self.tile_size))
+    # Update the map.
+    def update(self) -> None:
+        # Update the shaking animation.
+        if (round(self.render_shake > 0)):
+            self.shake_render_offset_x = randint(round(-self.render_shake * self.tile_render_size), round(self.render_shake * self.tile_render_size))
+            self.shake_render_offset_y = randint(round(-self.render_shake * self.tile_render_size), round(self.render_shake * self.tile_render_size))
+            self.render_shake = self.render_shake * 0.75
 
-    # Get The Sprites To Render
-    def get_sprites(self) -> List[dict]:
-        sprites: List[dict] = []
-        index: int = 0
+            self.render_offset_x = self.target_render_offset_x + self.shake_render_offset_x
+            self.render_offset_y = self.target_render_offset_y + self.shake_render_offset_y
+        else:
+            self.shake_render_offset_x = 0
+            self.shake_render_offset_y = 0
+
+            self.render_offset_x = self.target_render_offset_x
+            self.render_offset_y = self.target_render_offset_y
+
+    # Render the map.
+    def render(self) -> List[dict]:
+        sprites = []
+        index = 0
 
         for y in range(self.height):
             for x in range(self.width):
-                background_tile = Map.TILE_TYPES[self.background_tiles[index]]
-                foreground_tile = Map.TILE_TYPES[self.foreground_tiles[index]]
+                sprites.append(self.create_tile_sprites('tile_ground', 1, x, y + 0.15))
 
-                if (background_tile["image"] != None):
-                    sprites.append(self.create_tile_sprite(background_tile["image"], 0, x, y))
-                if (foreground_tile["image"] != None):
-                    sprites.append(self.create_tile_sprite(foreground_tile["image"], 1, x, y))                
+                tile_image = self.TILE_TYPES[self.tiles[index]]["image"]
+
+                # Make sure the tile is not empty.
+                if (tile_image != None):
+                    sprites.append(self.create_tile_sprites(tile_image, 3, x, y))
 
                 index += 1
 
         return sprites
 
-    # Create A Tile Sprite 
-    def create_tile_sprite(self, image: str, layer: int, x: int, y: int) -> dict:
+    # Create a tile sprite.
+    def create_tile_sprites(self, image: str, layer: int, x: Union[int, float], y: Union[int, float]) -> dict:
         return {
-            "layer": layer,
-            "data": create_image_view_data(
-                image,
-            
-                self.render_offset_x + (x * self.tile_size),
-                self.render_offset_y + (y * self.tile_size),
-            
-                self.tile_size,
-                self.tile_size
-            )
+                "layer": layer,
+                "data": create_image_view_data(
+                    image,
+                
+                    self.render_offset_x + (x * self.tile_render_size),
+                    self.render_offset_y + (y * self.tile_render_size),
+                
+                    self.tile_render_size,
+                    self.tile_render_size
+                )
         }

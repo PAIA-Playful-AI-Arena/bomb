@@ -1,23 +1,23 @@
 from typing import Union, Any, List 
 import json
 
-# Check The Type Of The Field
-def check_field_type(name: str, type_name: str, value: Any):
+# Check the type of the property.
+def check_property_type(name: str, type_name: str, value: Any):
     if type_name == "int" and type(value) is not int:
-        raise Exception(f"Type Error: The value of field \"{name}\" must be the \"int\" type")
+        raise Exception(f"[Type Error] The value of property \"{name}\" must be the \"int\" type!")
     elif type_name == "str" and type(value) is not str:
-        raise Exception(f"Type Error: The value of field \"{name}\" must be the \"str\" type")
+        raise Exception(f"[Type Error] The value of property \"{name}\" must be the \"str\" type!")
     elif type_name == "list" and type(value) is not list:
-        raise Exception(f"Type Error: The value of field \"{name}\" must be the \"list\" type")
+        raise Exception(f"[Type Error] The value of property \"{name}\" must be the \"list\" type!")
     elif type_name == "dict" and type(value) is not dict:
-        raise Exception(f"Type Error: The value of field \"{name}\" must be the \"dict\" type")
+        raise Exception(f"[Type Error] The value of property \"{name}\" must be the \"dict\" type!")
 
-# Check The Range Of The Field
-def check_field_range(name: str, min: int, max: int, value: int):
+# Check the range of the property.
+def check_property_range(name: str, value: int, min: int, max: int):
     if value < min or value > max:
-        raise Exception(f"Range Error: The value of field \"{name}\" must be between {min} and {max}")
+        raise Exception(f"[Range Error] The value of property \"{name}\" must be between {min} and {max}!")
 
-# Rules
+# The rules itsef.
 class Rules:
     def __init__(self, data: dict) -> None:
         self.player_speed: int = data.get('player_speed', 5)
@@ -25,17 +25,17 @@ class Rules:
         self.bomb_countdown: int = data.get('bomb_countdown', 150)
         self.bomb_explosion_range: int = data.get('bomb_explosion_range', 125)
 
-        check_field_type('rules.player_speed', 'int', self.player_speed)
-        check_field_type('rules.player_bombs', 'int', self.player_bombs)
-        check_field_type('rules.bomb_countdown', 'int', self.bomb_countdown)
-        check_field_type('rules.bomb_explode_range', 'int', self.bomb_explosion_range)
+        check_property_type('rules.player_speed', 'int', self.player_speed)
+        check_property_type('rules.player_bombs', 'int', self.player_bombs)
+        check_property_type('rules.bomb_countdown', 'int', self.bomb_countdown)
+        check_property_type('rules.bomb_explode_range', 'int', self.bomb_explosion_range)
 
-        check_field_range('rules.player_speed', 1, 99, self.player_speed)
-        check_field_range('rules.player_bombs', 1, 99, self.player_bombs)
-        check_field_range('rules.bomb_countdown', 1, 9999, self.bomb_countdown)
-        check_field_range('rules.bomb_explosion_range', 1, 9999, self.bomb_explosion_range)
+        check_property_range('rules.player_speed', self.player_speed, 1, 64)
+        check_property_range('rules.player_bombs', self.player_bombs, 1, 64)
+        check_property_range('rules.bomb_countdown', self.bomb_countdown, 1, 1024)
+        check_property_range('rules.bomb_explosion_range', self.bomb_explosion_range, 1, 1024)
 
-# Map
+# The map itself.
 class Map:
     def __init__(self, data: dict) -> None:
         self.width: int = data.get('width', 10)
@@ -46,30 +46,30 @@ class Map:
         for i in range(len(data["tiles"])):
             tile = data["tiles"][i]
 
-            check_field_type(f'map.tiles[{i}]', 'dict', tile)
-            check_field_type(f'map.tiles[{i}].type', 'str', tile["type"])
-            check_field_type(f'map.tiles[{i}].x', 'int', tile["x"])
-            check_field_type(f'map.tiles[{i}].y', 'int', tile["y"])
+            check_property_type(f'map.tiles[{i}]', 'dict', tile)
+            check_property_type(f'map.tiles[{i}].type', 'str', tile["type"])
+            check_property_type(f'map.tiles[{i}].x', 'int', tile["x"])
+            check_property_type(f'map.tiles[{i}].y', 'int', tile["y"])
 
-            check_field_range(f'map.tiles[{i}].x', 0, self.width - 1, tile["x"])
-            check_field_range(f'map.tiles[{i}].y', 0, self.height - 1, tile["y"])
+            check_property_range(f'map.tiles[{i}].x', tile["x"], 0, self.width - 1)
+            check_property_range(f'map.tiles[{i}].y', tile["y"], 0, self.height - 1)
 
             if (tile["type"] == "player"):
                 self.spawns.append({ "x": tile["x"], "y": tile["y"] })
             else:
                 self.tiles.append(tile)
 
-        check_field_type('map.width', 'int', self.width)
-        check_field_type('map.height', 'int', self.height)
-        check_field_type('map.tiles', 'list', self.tiles)
-        check_field_type('map.spawns', 'list', self.spawns)
+        check_property_type('map.width', 'int', self.width)
+        check_property_type('map.height', 'int', self.height)
+        check_property_type('map.tiles', 'list', self.tiles)
+        check_property_type('map.spawns', 'list', self.spawns)
 
-        check_field_range('map.width', 1, 99, self.width)
-        check_field_range('map.height', 1, 99, self.height)
+        check_property_range('map.width', self.width, 1, 64)
+        check_property_range('map.height', self.height, 1, 64)
 
-# Level
+# The level itself.
 class Level:
-    # Load The Level
+    # Load the level.
     def __init__(self, level_path: str) -> None:
         data = json.load(open(level_path))
 

@@ -107,8 +107,7 @@ class Game(PaiaGame):
         self.frame_count += 1
 
         if self.frame_count >= self.game_duration:
-            return "QUITE"
-
+            return "QUIT"
 
     # Get the scene progress data.
     def get_scene_progress_data(self) -> dict:
