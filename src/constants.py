@@ -1,0 +1,1 @@
+TEAM_COLORS = ['#6093DF', '#F99CB2', '#54BAA4', '#FFB359']

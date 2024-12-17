@@ -1,0 +1,159 @@
+{
+  "rules": {
+    "player_speed": 5,
+    "player_bombs": 2,
+    "bomb_countdown": 150,
+    "bomb_explode_range": 125
+  },
+  "map": {
+    "width": 11,
+    "height": 7,
+    "tiles": [
+      {
+        "type": "rock",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "type": "barrel",
+        "x": 0,
+        "y": 1
+      },
+      {
+        "type": "barrel",
+        "x": 0,
+        "y": 5
+      },
+      {
+        "type": "rock",
+        "x": 0,
+        "y": 6
+      },
+      {
+        "type": "barrel",
+        "x": 1,
+        "y": 0
+      },
+      {
+        "type": "player",
+        "x": 1,
+        "y": 1
+      },
+      {
+        "type": "player",
+        "x": 1,
+        "y": 5
+      },
+      {
+        "type": "barrel",
+        "x": 1,
+        "y": 6
+      },
+      {
+        "type": "barrel",
+        "x": 4,
+        "y": 2
+      },
+      {
+        "type": "rock",
+        "x": 4,
+        "y": 3
+      },
+      {
+        "type": "barrel",
+        "x": 4,
+        "y": 4
+      },
+      {
+        "type": "barrel",
+        "x": 5,
+        "y": 0
+      },
+      {
+        "type": "barrel",
+        "x": 5,
+        "y": 1
+      },
+      {
+        "type": "rock",
+        "x": 5,
+        "y": 2
+      },
+      {
+        "type": "rock",
+        "x": 5,
+        "y": 3
+      },
+      {
+        "type": "rock",
+        "x": 5,
+        "y": 4
+      },
+      {
+        "type": "barrel",
+        "x": 5,
+        "y": 5
+      },
+      {
+        "type": "barrel",
+        "x": 5,
+        "y": 6
+      },
+      {
+        "type": "barrel",
+        "x": 6,
+        "y": 2
+      },
+      {
+        "type": "rock",
+        "x": 6,
+        "y": 3
+      },
+      {
+        "type": "barrel",
+        "x": 6,
+        "y": 4
+      },
+      {
+        "type": "barrel",
+        "x": 9,
+        "y": 0
+      },
+      {
+        "type": "player",
+        "x": 9,
+        "y": 1
+      },
+      {
+        "type": "player",
+        "x": 9,
+        "y": 5
+      },
+      {
+        "type": "barrel",
+        "x": 9,
+        "y": 6
+      },
+      {
+        "type": "rock",
+        "x": 10,
+        "y": 0
+      },
+      {
+        "type": "barrel",
+        "x": 10,
+        "y": 1
+      },
+      {
+        "type": "barrel",
+        "x": 10,
+        "y": 5
+      },
+      {
+        "type": "rock",
+        "x": 10,
+        "y": 6
+      }
+    ]
+  }
+}
